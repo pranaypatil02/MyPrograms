@@ -1,0 +1,4 @@
+# Accidentally created node dependencies in root
+node_modules/
+package.json
+package-lock.json
