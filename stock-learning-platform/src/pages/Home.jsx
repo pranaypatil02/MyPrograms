@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
-import { FaChartLine, FaGraduationCap, FaCalculator, FaUsers } from 'react-icons/fa';
+import { FaChartLine, FaGraduationCap, FaCalculator, FaUsers, FaBook } from 'react-icons/fa';
 
 const Home = () => {
   // Sample data for animated chart

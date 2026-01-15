@@ -1,300 +1,108 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaSearch, FaCheckCircle, FaExclamationTriangle, FaTimes } from 'react-icons/fa';
+import { FaSearch, FaCheckCircle, FaExclamationTriangle, FaTimes, FaExclamationCircle } from 'react-icons/fa';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
+import stockService from '../services/stockService';
 
 const PortfolioSimulator = () => {
   const [ticker, setTicker] = useState('');
   const [analysis, setAnalysis] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Sample stock data (in real app, would fetch from API)
-  const stockDatabase = {
-    'AAPL': {
-      name: 'Apple Inc.',
-      sector: 'Technology',
-      price: 178.50,
-      marketCap: '2.8T',
-      metrics: {
-        pe: 29.5,
-        eps: 6.05,
-        roe: 147.5,
-        roa: 27.9,
-        roic: 52.3,
-        debtToEquity: 1.97,
-        currentRatio: 0.98,
-        grossMargin: 43.8,
-        operatingMargin: 30.7,
-        netMargin: 26.3,
-        dividendYield: 0.5,
-        fcf: 99.8,
-        revenue: 394.3,
-        revenueGrowth: 7.8
-      },
-      sectorAvg: {
-        pe: 28,
-        roe: 18,
-        roa: 10
-      },
-      priceHistory: [
-        { month: 'Jan', price: 155 },
-        { month: 'Feb', price: 162 },
-        { month: 'Mar', price: 171 },
-        { month: 'Apr', price: 168 },
-        { month: 'May', price: 175 },
-        { month: 'Jun', price: 178.5 }
-      ],
-      strengths: [
-        'Massive cash reserves ($166B+)',
-        'Strong ecosystem lock-in',
-        'Premium brand pricing power',
-        'Growing services revenue (high margin)',
-        'Consistent innovation track record'
-      ],
-      risks: [
-        'iPhone dependency (~50% revenue)',
-        'China exposure (geopolitical risk)',
-        'Mature smartphone market',
-        'Regulatory scrutiny (App Store)',
-        'High valuation limits upside'
-      ]
-    },
-    'MSFT': {
-      name: 'Microsoft Corporation',
-      sector: 'Technology',
-      price: 378.91,
-      marketCap: '2.8T',
-      metrics: {
-        pe: 35.2,
-        eps: 10.76,
-        roe: 41.7,
-        roa: 17.2,
-        roic: 28.9,
-        debtToEquity: 0.47,
-        currentRatio: 1.77,
-        grossMargin: 69.8,
-        operatingMargin: 43.1,
-        netMargin: 36.7,
-        dividendYield: 0.8,
-        fcf: 73.5,
-        revenue: 227.6,
-        revenueGrowth: 12.4
-      },
-      sectorAvg: {
-        pe: 28,
-        roe: 18,
-        roa: 10
-      },
-      priceHistory: [
-        { month: 'Jan', price: 340 },
-        { month: 'Feb', price: 355 },
-        { month: 'Mar', price: 368 },
-        { month: 'Apr', price: 362 },
-        { month: 'May', price: 375 },
-        { month: 'Jun', price: 378.9 }
-      ],
-      strengths: [
-        'Azure cloud growing 30%+ annually',
-        'Enterprise software moat',
-        'Office 365 recurring revenue',
-        'AI leadership (OpenAI partnership)',
-        'Excellent management (Satya Nadella)'
-      ],
-      risks: [
-        'Cloud competition (AWS, Google)',
-        'High valuation (P/E over 35)',
-        'Regulatory concerns',
-        'LinkedIn growth slowing',
-        'Gaming division integration challenges'
-      ]
-    },
-    'GOOGL': {
-      name: 'Alphabet Inc. (Google)',
-      sector: 'Technology',
-      price: 142.35,
-      marketCap: '1.8T',
-      metrics: {
-        pe: 26.8,
-        eps: 5.31,
-        roe: 29.2,
-        roa: 18.7,
-        roic: 24.1,
-        debtToEquity: 0.11,
-        currentRatio: 2.93,
-        grossMargin: 57.1,
-        operatingMargin: 27.9,
-        netMargin: 23.5,
-        dividendYield: 0.0,
-        fcf: 69.5,
-        revenue: 307.4,
-        revenueGrowth: 8.6
-      },
-      sectorAvg: {
-        pe: 28,
-        roe: 18,
-        roa: 10
-      },
-      priceHistory: [
-        { month: 'Jan', price: 128 },
-        { month: 'Feb', price: 132 },
-        { month: 'Mar', price: 138 },
-        { month: 'Apr', price: 135 },
-        { month: 'May', price: 140 },
-        { month: 'Jun', price: 142.4 }
-      ],
-      strengths: [
-        'Search monopoly (90%+ market share)',
-        'YouTube domination',
-        'Android ecosystem',
-        'AI/ML technology leadership',
-        'Minimal debt, huge cash position'
-      ],
-      risks: [
-        'Ad revenue dependency (80%+)',
-        'Regulatory threats (antitrust)',
-        'Privacy concerns affecting tracking',
-        'Cloud #3 player (behind AWS, Azure)',
-        'Other Bets losing money'
-      ]
-    },
-    'JPM': {
-      name: 'JPMorgan Chase & Co.',
-      sector: 'Finance',
-      price: 198.45,
-      marketCap: '580B',
-      metrics: {
-        pe: 11.2,
-        eps: 17.72,
-        roe: 17.3,
-        roa: 1.3,
-        roic: 3.8,
-        debtToEquity: 1.45,
-        currentRatio: 0.92,
-        grossMargin: 28.3,
-        operatingMargin: 38.2,
-        netMargin: 29.1,
-        dividendYield: 2.4,
-        fcf: 48.2,
-        revenue: 158.1,
-        revenueGrowth: 22.3
-      },
-      sectorAvg: {
-        pe: 12,
-        roe: 12,
-        roa: 1.2
-      },
-      priceHistory: [
-        { month: 'Jan', price: 172 },
-        { month: 'Feb', price: 180 },
-        { month: 'Mar', price: 188 },
-        { month: 'Apr', price: 184 },
-        { month: 'May', price: 193 },
-        { month: 'Jun', price: 198.5 }
-      ],
-      strengths: [
-        'Largest US bank by assets',
-        'Diversified revenue streams',
-        'Strong investment banking division',
-        'Benefits from rising interest rates',
-        'Excellent risk management'
-      ],
-      risks: [
-        'Credit risk in recession',
-        'Heavy regulation',
-        'Interest rate sensitivity',
-        'Trading revenue volatility',
-        'Political/regulatory risk'
-      ]
-    },
-    'TSLA': {
-      name: 'Tesla, Inc.',
-      sector: 'Consumer Discretionary',
-      price: 248.50,
-      marketCap: '790B',
-      metrics: {
-        pe: 68.5,
-        eps: 3.63,
-        roe: 28.5,
-        roa: 11.2,
-        roic: 16.8,
-        debtToEquity: 0.17,
-        currentRatio: 1.73,
-        grossMargin: 18.2,
-        operatingMargin: 9.8,
-        netMargin: 13.1,
-        dividendYield: 0.0,
-        fcf: 4.2,
-        revenue: 96.8,
-        revenueGrowth: 51.4
-      },
-      sectorAvg: {
-        pe: 18,
-        roe: 14,
-        roa: 7
-      },
-      priceHistory: [
-        { month: 'Jan', price: 185 },
-        { month: 'Feb', price: 202 },
-        { month: 'Mar', price: 228 },
-        { month: 'Apr', price: 215 },
-        { month: 'May', price: 238 },
-        { month: 'Jun', price: 248.5 }
-      ],
-      strengths: [
-        'EV market leader',
-        'Vertical integration advantages',
-        'Supercharger network moat',
-        'Software/FSD potential',
-        'Energy storage business growing'
-      ],
-      risks: [
-        'Extremely high valuation (P/E 68)',
-        'Increasing competition (traditional OEMs)',
-        'Elon Musk execution risk',
-        'Margins under pressure',
-        'Production/delivery challenges'
-      ]
+  // State for error handling
+  const [error, setError] = useState(null);
+
+  const analyzeStock = async () => {
+    if (!ticker.trim()) return;
+
+    setLoading(true);
+    setError(null);
+    setAnalysis(null);
+
+    try {
+      const result = await stockService.getStockData(ticker);
+
+      if (result.error) {
+        console.warn(`Using ${result.source} data due to: ${result.error}`);
+      }
+
+      setAnalysis(result.data);
+
+      // Log service status for debugging
+      const status = stockService.getServiceStatus();
+      console.log(`Stock analysis completed using ${result.source} data`, status);
+    } catch (err) {
+      console.error('Error analyzing stock:', err);
+      setError(err.message || 'Failed to analyze stock. Please try again.');
+      setAnalysis({ notFound: true });
+    } finally {
+      setLoading(false);
     }
   };
 
-  const analyzeStock = () => {
-    setLoading(true);
-
-    setTimeout(() => {
-      const upperTicker = ticker.toUpperCase();
-      if (stockDatabase[upperTicker]) {
-        setAnalysis(stockDatabase[upperTicker]);
-      } else {
-        setAnalysis({ notFound: true });
-      }
-      setLoading(false);
-    }, 1000);
-  };
-
   const getValuationStatus = (stock) => {
-    if (!stock || stock.notFound) return null;
+    if (!stock || stock.notFound || !stock.metrics || !stock.sectorAvg) return null;
 
-    const peVsSector = ((stock.metrics.pe / stock.sectorAvg.pe - 1) * 100).toFixed(1);
-    const roe = stock.metrics.roe;
-    const margin = stock.metrics.netMargin;
+    const pe = stock.metrics.pe || 0;
+    const sectorPE = stock.sectorAvg.pe || 15;
+    const roe = stock.metrics.roe || 0;
+    const margin = stock.metrics.netMargin || 0;
+
+    const peVsSector = pe > 0 && sectorPE > 0 ? ((pe / sectorPE - 1) * 100).toFixed(1) : '0.0';
 
     let status = 'fair';
-    if (stock.metrics.pe < stock.sectorAvg.pe * 0.85 && roe > 15) {
+    if (pe < sectorPE * 0.85 && roe > 15) {
       status = 'undervalued';
-    } else if (stock.metrics.pe > stock.sectorAvg.pe * 1.3) {
+    } else if (pe > sectorPE * 1.3) {
       status = 'overvalued';
     }
 
     return { status, peVsSector, roe, margin };
   };
 
-  const radarData = analysis && !analysis.notFound ? [
-    { metric: 'Profitability', value: Math.min(analysis.metrics.netMargin / 40 * 100, 100) },
-    { metric: 'Growth', value: Math.min(analysis.metrics.revenueGrowth / 50 * 100, 100) },
-    { metric: 'Efficiency', value: Math.min(analysis.metrics.roe / 150 * 100, 100) },
-    { metric: 'Liquidity', value: Math.min(analysis.metrics.currentRatio / 3 * 100, 100) },
-    { metric: 'Value', value: Math.max(100 - (analysis.metrics.pe / 80 * 100), 0) }
+  const radarData = analysis && !analysis.notFound && analysis.metrics ? [
+    {
+      metric: 'Profitability',
+      value: Math.min(Math.max((parseFloat(analysis.metrics.netMargin) || 0) / 40 * 100, 0), 100)
+    },
+    {
+      metric: 'Growth',
+      value: Math.min(Math.max((parseFloat(analysis.metrics.revenueGrowth) || 0) / 50 * 100, 0), 100)
+    },
+    {
+      metric: 'Efficiency',
+      value: Math.min(Math.max((parseFloat(analysis.metrics.roe) || 0) / 150 * 100, 0), 100)
+    },
+    {
+      metric: 'Liquidity',
+      value: Math.min(Math.max((parseFloat(analysis.metrics.currentRatio) || 0) / 3 * 100, 0), 100)
+    },
+    {
+      metric: 'Value',
+      value: (() => {
+        const pe = parseFloat(analysis.metrics.pe);
+        return pe && pe > 0 ? Math.min(Math.max((50 / pe) * 100, 0), 100) : 0;
+      })()
+    },
+    {
+      metric: 'Dividends',
+      value: Math.min(Math.max((parseFloat(analysis.metrics.dividendYield) || 0) / 5 * 100, 0), 100)
+    }
   ] : [];
+
+  // Debug logging
+  if (analysis && !analysis.notFound && analysis.metrics) {
+    console.log('Radar data values:', radarData);
+    console.log('Metrics:', analysis.metrics);
+    console.log('Parsed metrics:', {
+      netMargin: parseFloat(analysis.metrics.netMargin),
+      revenueGrowth: parseFloat(analysis.metrics.revenueGrowth),
+      roe: parseFloat(analysis.metrics.roe),
+      currentRatio: parseFloat(analysis.metrics.currentRatio),
+      pe: parseFloat(analysis.metrics.pe),
+      dividendYield: parseFloat(analysis.metrics.dividendYield)
+    });
+  }
 
   return (
     <div className="min-h-screen py-12">
@@ -342,18 +150,40 @@ const PortfolioSimulator = () => {
             <div className="text-center py-12">
               <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
               <p className="mt-4 text-gray-600">Analyzing {ticker}...</p>
+              <p className="mt-4 text-sm text-yellow-800 bg-yellow-100 p-3 rounded border border-yellow-200">
+                <span className="font-bold">Note:</span> This is a simulation using &quot;real-time&quot; data from our provider. Market conditions change rapidly.
+              </p>
+              <p className="text-sm text-gray-500 mt-2">
+                {stockService.isUsingRealAPI() ? 'Fetching real-time data...' : 'Using sample data...'}
+              </p>
+            </div>
+          )}
+
+          {/* Error */}
+          {error && !loading && (
+            <div className="card bg-red-50 border-2 border-red-300">
+              <div className="flex items-start gap-3 text-red-800">
+                <FaExclamationCircle className="text-2xl mt-1" />
+                <div>
+                  <h3 className="font-semibold">Analysis Error</h3>
+                  <p className="text-sm">{error}</p>
+                  <p className="text-xs mt-2">
+                    Try: AAPL, MSFT, GOOGL, AMZN, TSLA, JPM, JNJ, or BAC
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 
           {/* Not Found */}
-          {analysis && analysis.notFound && (
+          {analysis && analysis.notFound && !error && !loading && (
             <div className="card bg-red-50 border-2 border-red-300">
               <div className="flex items-center gap-3 text-red-800">
                 <FaTimes className="text-2xl" />
                 <div>
                   <h3 className="font-semibold">Stock Not Found</h3>
                   <p className="text-sm">
-                    "{ticker}" is not in our database. Try AAPL, MSFT, GOOGL, JPM, or TSLA.
+                    &quot;{ticker}&quot; is not in our database. Try AAPL, MSFT, GOOGL, JPM, or TSLA.
                   </p>
                 </div>
               </div>
@@ -384,14 +214,13 @@ const PortfolioSimulator = () => {
                 {(() => {
                   const val = getValuationStatus(analysis);
                   return (
-                    <div className={`p-4 rounded-lg flex items-center gap-3 ${
-                      val.status === 'undervalued' ? 'bg-green-100 border-2 border-green-400' :
+                    <div className={`p-4 rounded-lg flex items-center gap-3 ${val.status === 'undervalued' ? 'bg-green-100 border-2 border-green-400' :
                       val.status === 'overvalued' ? 'bg-red-100 border-2 border-red-400' :
-                      'bg-yellow-100 border-2 border-yellow-400'
-                    }`}>
+                        'bg-yellow-100 border-2 border-yellow-400'
+                      }`}>
                       {val.status === 'undervalued' ? <FaCheckCircle className="text-green-600 text-2xl" /> :
-                       val.status === 'overvalued' ? <FaExclamationTriangle className="text-red-600 text-2xl" /> :
-                       <FaExclamationTriangle className="text-yellow-600 text-2xl" />}
+                        val.status === 'overvalued' ? <FaExclamationTriangle className="text-red-600 text-2xl" /> :
+                          <FaExclamationTriangle className="text-yellow-600 text-2xl" />}
                       <div>
                         <p className="font-bold capitalize text-lg">{val.status}</p>
                         <p className="text-sm">
@@ -492,15 +321,22 @@ const PortfolioSimulator = () => {
               {/* Radar Chart */}
               <div className="card">
                 <h3 className="subsection-title">Overall Health Score</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <RadarChart data={radarData}>
-                    <PolarGrid />
-                    <PolarAngleAxis dataKey="metric" />
-                    <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                    <Radar name="Score" dataKey="value" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
-                    <Tooltip />
-                  </RadarChart>
-                </ResponsiveContainer>
+                {radarData.length > 0 && radarData.some(item => item.value > 0) ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <RadarChart data={radarData}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="metric" />
+                      <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                      <Radar name="Score" dataKey="value" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+                      <Tooltip />
+                    </RadarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="py-8 text-center text-gray-500">
+                    <p>Health score data not available for this stock.</p>
+                    <p className="text-sm mt-2">Check console for detailed metrics.</p>
+                  </div>
+                )}
               </div>
 
               {/* Strengths & Risks */}

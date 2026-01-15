@@ -7,7 +7,7 @@ const Glossary = () => {
   const [simpleMode, setSimpleMode] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
 
-  const glossaryTerms = [
+  const glossaryTerms = useMemo(() => [
     {
       term: 'EPS (Earnings Per Share)',
       category: 'Profitability',
@@ -152,7 +152,7 @@ const Glossary = () => {
       example: '$15M net income ÷ $100M revenue = 15% net margin',
       formula: 'Net Margin = (Net Income ÷ Revenue) × 100'
     }
-  ];
+  ], []);
 
   const categories = ['all', ...new Set(glossaryTerms.map(term => term.category))];
 
@@ -163,7 +163,7 @@ const Glossary = () => {
       const matchesCategory = selectedCategory === 'all' || term.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, glossaryTerms]);
 
   return (
     <div className="min-h-screen py-12">

@@ -141,7 +141,7 @@ const Sectors = () => {
     }
   };
 
-  const allSectorsComparison = Object.entries(sectorData).map(([key, data]) => ({
+  const allSectorsComparison = Object.entries(sectorData).map(([, data]) => ({
     sector: data.name,
     PE: data.metrics.avgPE,
     ROE: data.metrics.avgROE,
@@ -168,7 +168,7 @@ const Sectors = () => {
           >
             <h1 className="section-title text-4xl">Sector Insights</h1>
             <p className="text-gray-600 text-lg">
-              Compare valuation metrics across different industries and understand sector-specific dynamics
+              Always research heavily before attempting to time the market&apos;s rotation.
             </p>
           </motion.div>
 
@@ -178,11 +178,10 @@ const Sectors = () => {
               <button
                 key={key}
                 onClick={() => setSelectedSector(key)}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                  selectedSector === key
-                    ? 'text-white shadow-lg'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
-                }`}
+                className={`px-6 py-3 rounded-lg font-semibold transition-all ${selectedSector === key
+                  ? 'text-white shadow-lg'
+                  : 'bg-white text-gray-700 hover:bg-gray-100'
+                  }`}
                 style={{
                   backgroundColor: selectedSector === key ? data.color : undefined
                 }}
@@ -365,11 +364,11 @@ const Sectors = () => {
             <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-300 p-6 rounded-lg">
               <h3 className="font-semibold text-gray-900 mb-3">💡 Why Sectors Differ in Valuation</h3>
               <p className="text-gray-700 mb-2">
-                Different sectors have different "normal" P/E ratios and metrics because:
+                Different sectors have different &quot;normal&quot; P/E ratios and metrics because:
               </p>
               <ul className="space-y-2 text-gray-700">
                 <li><strong>Growth Expectations:</strong> Tech gets higher P/E due to faster growth potential</li>
-                <li><strong>Capital Structure:</strong> Banks naturally have high debt (it's their business model)</li>
+                <li><strong>Capital Structure:</strong> Banks naturally have high debt (it&apos;s their business model)</li>
                 <li><strong>Cyclicality:</strong> Energy earnings fluctuate with commodity prices</li>
                 <li><strong>Margins:</strong> Software has higher margins than retail</li>
                 <li><strong>Risk Profile:</strong> Defensive sectors trade at different multiples than cyclical ones</li>

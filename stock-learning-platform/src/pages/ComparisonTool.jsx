@@ -1,174 +1,96 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaExchangeAlt, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaExchangeAlt, FaCheckCircle, FaTimesCircle, FaExclamationCircle } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import stockService from '../services/stockService';
 
 const ComparisonTool = () => {
   const [stock1, setStock1] = useState('');
   const [stock2, setStock2] = useState('');
   const [comparison, setComparison] = useState(null);
 
-  // Sample stock database (same as Portfolio Simulator)
-  const stockDatabase = {
-    'AAPL': {
-      name: 'Apple',
-      sector: 'Technology',
-      price: 178.50,
-      marketCap: '2.8T',
-      pe: 29.5,
-      eps: 6.05,
-      roe: 147.5,
-      roa: 27.9,
-      roic: 52.3,
-      debtToEquity: 1.97,
-      dividendYield: 0.5,
-      revenueGrowth: 7.8,
-      netMargin: 26.3,
-      currentRatio: 0.98,
-      fcf: 99.8
-    },
-    'MSFT': {
-      name: 'Microsoft',
-      sector: 'Technology',
-      price: 378.91,
-      marketCap: '2.8T',
-      pe: 35.2,
-      eps: 10.76,
-      roe: 41.7,
-      roa: 17.2,
-      roic: 28.9,
-      debtToEquity: 0.47,
-      dividendYield: 0.8,
-      revenueGrowth: 12.4,
-      netMargin: 36.7,
-      currentRatio: 1.77,
-      fcf: 73.5
-    },
-    'GOOGL': {
-      name: 'Google',
-      sector: 'Technology',
-      price: 142.35,
-      marketCap: '1.8T',
-      pe: 26.8,
-      eps: 5.31,
-      roe: 29.2,
-      roa: 18.7,
-      roic: 24.1,
-      debtToEquity: 0.11,
-      dividendYield: 0.0,
-      revenueGrowth: 8.6,
-      netMargin: 23.5,
-      currentRatio: 2.93,
-      fcf: 69.5
-    },
-    'JPM': {
-      name: 'JPMorgan',
-      sector: 'Finance',
-      price: 198.45,
-      marketCap: '580B',
-      pe: 11.2,
-      eps: 17.72,
-      roe: 17.3,
-      roa: 1.3,
-      roic: 3.8,
-      debtToEquity: 1.45,
-      dividendYield: 2.4,
-      revenueGrowth: 22.3,
-      netMargin: 29.1,
-      currentRatio: 0.92,
-      fcf: 48.2
-    },
-    'TSLA': {
-      name: 'Tesla',
-      sector: 'Consumer',
-      price: 248.50,
-      marketCap: '790B',
-      pe: 68.5,
-      eps: 3.63,
-      roe: 28.5,
-      roa: 11.2,
-      roic: 16.8,
-      debtToEquity: 0.17,
-      dividendYield: 0.0,
-      revenueGrowth: 51.4,
-      netMargin: 13.1,
-      currentRatio: 1.73,
-      fcf: 4.2
-    },
-    'BAC': {
-      name: 'Bank of America',
-      sector: 'Finance',
-      price: 34.82,
-      marketCap: '275B',
-      pe: 10.8,
-      eps: 3.22,
-      roe: 11.2,
-      roa: 1.0,
-      roic: 3.2,
-      debtToEquity: 1.22,
-      dividendYield: 2.8,
-      revenueGrowth: 5.4,
-      netMargin: 25.8,
-      currentRatio: 0.88,
-      fcf: 28.5
-    },
-    'AMZN': {
-      name: 'Amazon',
-      sector: 'Consumer',
-      price: 178.25,
-      marketCap: '1.8T',
-      pe: 72.3,
-      eps: 2.47,
-      roe: 21.3,
-      roa: 6.8,
-      roic: 11.2,
-      debtToEquity: 0.58,
-      dividendYield: 0.0,
-      revenueGrowth: 9.4,
-      netMargin: 6.3,
-      currentRatio: 1.02,
-      fcf: 21.4
-    },
-    'JNJ': {
-      name: 'Johnson & Johnson',
-      sector: 'Healthcare',
-      price: 159.82,
-      marketCap: '395B',
-      pe: 24.5,
-      eps: 6.52,
-      roe: 24.1,
-      roa: 9.8,
-      roic: 14.2,
-      debtToEquity: 0.52,
-      dividendYield: 3.0,
-      revenueGrowth: 1.3,
-      netMargin: 16.2,
-      currentRatio: 1.12,
-      fcf: 18.5
-    }
-  };
+  // State for loading and errors
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const compareStocks = async () => {
+    if (!stock1.trim() || !stock2.trim()) return;
+    
+    setLoading(true);
+    setError(null);
+    setComparison(null);
 
-  const compareStocks = () => {
-    const s1 = stockDatabase[stock1.toUpperCase()];
-    const s2 = stockDatabase[stock2.toUpperCase()];
+    try {
+      const result = await stockService.getStockComparison(stock1, stock2);
+      
+      if (result.error) {
+        console.warn(`Using ${result.source} data due to: ${result.error}`);
+      }
 
-    if (s1 && s2) {
+      const { stock1: s1, stock2: s2, comparison: comp } = result.data;
+      
+      // Transform stock data to match original component structure
+      const transformedStock1 = {
+        name: s1.name,
+        sector: s1.sector,
+        price: s1.price,
+        marketCap: s1.marketCap,
+        pe: s1.metrics.pe || 0,
+        eps: s1.metrics.eps || 0,
+        roe: s1.metrics.roe || 0,
+        roa: s1.metrics.roa || 0,
+        roic: s1.metrics.roic || 0,
+        debtToEquity: s1.metrics.debtToEquity || 0,
+        dividendYield: s1.metrics.dividendYield || 0,
+        revenueGrowth: s1.metrics.revenueGrowth || 0,
+        netMargin: s1.metrics.netMargin || 0,
+        currentRatio: s1.metrics.currentRatio || 0,
+        fcf: s1.metrics.fcf || 0
+      };
+
+      const transformedStock2 = {
+        name: s2.name,
+        sector: s2.sector,
+        price: s2.price,
+        marketCap: s2.marketCap,
+        pe: s2.metrics.pe || 0,
+        eps: s2.metrics.eps || 0,
+        roe: s2.metrics.roe || 0,
+        roa: s2.metrics.roa || 0,
+        roic: s2.metrics.roic || 0,
+        debtToEquity: s2.metrics.debtToEquity || 0,
+        dividendYield: s2.metrics.dividendYield || 0,
+        revenueGrowth: s2.metrics.revenueGrowth || 0,
+        netMargin: s2.metrics.netMargin || 0,
+        currentRatio: s2.metrics.currentRatio || 0,
+        fcf: s2.metrics.fcf || 0
+      };
+      
+      // Transform data for chart
       const comparisonData = [
-        { metric: 'P/E Ratio', [s1.name]: s1.pe, [s2.name]: s2.pe },
-        { metric: 'ROE (%)', [s1.name]: s1.roe, [s2.name]: s2.roe },
-        { metric: 'ROA (%)', [s1.name]: s1.roa, [s2.name]: s2.roa },
-        { metric: 'Revenue Growth (%)', [s1.name]: s1.revenueGrowth, [s2.name]: s2.revenueGrowth },
-        { metric: 'Net Margin (%)', [s1.name]: s1.netMargin, [s2.name]: s2.netMargin },
-        { metric: 'Dividend Yield (%)', [s1.name]: s1.dividendYield, [s2.name]: s2.dividendYield }
+        { metric: 'P/E Ratio', [transformedStock1.name]: transformedStock1.pe, [transformedStock2.name]: transformedStock2.pe },
+        { metric: 'ROE (%)', [transformedStock1.name]: transformedStock1.roe, [transformedStock2.name]: transformedStock2.roe },
+        { metric: 'ROA (%)', [transformedStock1.name]: transformedStock1.roa, [transformedStock2.name]: transformedStock2.roa },
+        { metric: 'Revenue Growth (%)', [transformedStock1.name]: transformedStock1.revenueGrowth, [transformedStock2.name]: transformedStock2.revenueGrowth },
+        { metric: 'Net Margin (%)', [transformedStock1.name]: transformedStock1.netMargin, [transformedStock2.name]: transformedStock2.netMargin },
+        { metric: 'Dividend Yield (%)', [transformedStock1.name]: transformedStock1.dividendYield, [transformedStock2.name]: transformedStock2.dividendYield }
       ];
 
       setComparison({
-        stock1: s1,
-        stock2: s2,
+        stock1: transformedStock1,
+        stock2: transformedStock2,
+        comparison: comp,
         chartData: comparisonData
       });
-    } else {
+
+      // Log service status for debugging
+      const status = stockService.getServiceStatus();
+      console.log(`Stock comparison completed using ${result.source} data`, status);
+    } catch (err) {
+      console.error('Error comparing stocks:', err);
+      setError(err.message || 'Failed to compare stocks. Please try again.');
       setComparison({ error: true });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -250,8 +172,32 @@ const ComparisonTool = () => {
             </div>
           </div>
 
-          {/* Error */}
-          {comparison && comparison.error && (
+          {/* Loading */}
+          {loading && (
+            <div className="text-center py-12">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <p className="mt-4 text-gray-600">Comparing {stock1} vs {stock2}...</p>
+              <p className="text-sm text-gray-500 mt-2">
+                {stockService.isUsingRealAPI() ? 'Fetching real-time data...' : 'Using sample data...'}
+              </p>
+            </div>
+          )}
+
+          {/* Error from service */}
+          {error && !loading && (
+            <div className="card bg-red-50 border-2 border-red-300">
+              <div className="flex items-start gap-3 text-red-800">
+                <FaExclamationCircle className="text-2xl mt-1" />
+                <div>
+                  <h3 className="font-semibold">Comparison Error</h3>
+                  <p className="text-sm">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Error from old logic */}
+          {comparison && comparison.error && !error && !loading && (
             <div className="card bg-red-50 border-2 border-red-300">
               <p className="text-red-800">
                 One or both stocks not found. Please check the ticker symbols and try again.

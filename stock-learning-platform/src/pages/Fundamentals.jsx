@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 
 const Fundamentals = () => {
   const [activeModule, setActiveModule] = useState('earnings');
-  const [showTooltip, setShowTooltip] = useState(null);
+  
 
   const modules = {
     earnings: {

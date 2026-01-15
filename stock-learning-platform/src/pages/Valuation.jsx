@@ -26,7 +26,7 @@ const Valuation = () => {
   // Calculate P/E Ratio
   const peRatio = (peStockPrice / peEarnings).toFixed(2);
   const peStatus = peRatio < peSectorAvg * 0.8 ? 'undervalued' :
-                   peRatio > peSectorAvg * 1.2 ? 'overvalued' : 'fair';
+    peRatio > peSectorAvg * 1.2 ? 'overvalued' : 'fair';
 
   // Calculate DCF
   const calculateDCF = () => {
@@ -81,31 +81,28 @@ const Valuation = () => {
           <div className="flex flex-wrap gap-4 justify-center mb-12">
             <button
               onClick={() => setActiveTool('pe')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                activeTool === 'pe'
-                  ? 'bg-primary text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeTool === 'pe'
+                ? 'bg-primary text-white shadow-lg'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+                }`}
             >
               P/E Ratio Visualizer
             </button>
             <button
               onClick={() => setActiveTool('dcf')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                activeTool === 'dcf'
-                  ? 'bg-primary text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeTool === 'dcf'
+                ? 'bg-primary text-white shadow-lg'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+                }`}
             >
               DCF Calculator
             </button>
             <button
               onClick={() => setActiveTool('returns')}
-              className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                activeTool === 'returns'
-                  ? 'bg-primary text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
+              className={`px-6 py-3 rounded-lg font-semibold transition-all ${activeTool === 'returns'
+                ? 'bg-primary text-white shadow-lg'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+                }`}
             >
               ROE / ROA / ROIC
             </button>
@@ -121,7 +118,7 @@ const Valuation = () => {
               <div className="card">
                 <h2 className="subsection-title">P/E Ratio Visualizer</h2>
                 <p className="text-gray-600 mb-6">
-                  The Price-to-Earnings ratio compares a company's stock price to its earnings per share.
+                  The Price-to-Earnings ratio compares a company&apos;s stock price to its earnings per share.
                   Lower P/E ratios may indicate undervaluation.
                 </p>
 
@@ -168,27 +165,28 @@ const Valuation = () => {
                     <h3 className="font-semibold text-gray-900 mb-4">Valuation Result</h3>
                     <div className="bg-white rounded-lg p-6 mb-4">
                       <div className="text-5xl font-bold text-center mb-2"
-                           style={{ color: peStatus === 'undervalued' ? '#10b981' :
-                                          peStatus === 'overvalued' ? '#ef4444' : '#f59e0b' }}>
+                        style={{
+                          color: peStatus === 'undervalued' ? '#10b981' :
+                            peStatus === 'overvalued' ? '#ef4444' : '#f59e0b'
+                        }}>
                         {peRatio}
                       </div>
                       <p className="text-center text-gray-600">P/E Ratio</p>
                     </div>
 
-                    <div className={`p-4 rounded-lg flex items-center gap-3 ${
-                      peStatus === 'undervalued' ? 'bg-green-100 border border-green-300' :
+                    <div className={`p-4 rounded-lg flex items-center gap-3 ${peStatus === 'undervalued' ? 'bg-green-100 border border-green-300' :
                       peStatus === 'overvalued' ? 'bg-red-100 border border-red-300' :
-                      'bg-yellow-100 border border-yellow-300'
-                    }`}>
+                        'bg-yellow-100 border border-yellow-300'
+                      }`}>
                       {peStatus === 'undervalued' ? <FaCheckCircle className="text-green-600 text-2xl" /> :
-                       peStatus === 'overvalued' ? <FaExclamationTriangle className="text-red-600 text-2xl" /> :
-                       <FaChartLine className="text-yellow-600 text-2xl" />}
+                        peStatus === 'overvalued' ? <FaExclamationTriangle className="text-red-600 text-2xl" /> :
+                          <FaChartLine className="text-yellow-600 text-2xl" />}
                       <div>
                         <p className="font-semibold capitalize">{peStatus}</p>
                         <p className="text-sm">
                           {peStatus === 'undervalued' && 'Stock may be a buying opportunity'}
                           {peStatus === 'overvalued' && 'Stock may be overpriced'}
-                          {peStatus === 'fair' && 'Stock is fairly valued'}
+                          Understanding a company&apos;s true worth is the key to successful investing
                         </p>
                       </div>
                     </div>
@@ -227,7 +225,7 @@ const Valuation = () => {
               <div className="card">
                 <h2 className="subsection-title">DCF (Discounted Cash Flow) Calculator</h2>
                 <p className="text-gray-600 mb-6">
-                  DCF estimates a company's fair value by projecting future cash flows and discounting them to present value.
+                  DCF estimates a company&apos;s fair value by projecting future cash flows and discounting them to present value.
                   This is a simplified version for educational purposes.
                 </p>
 
@@ -384,9 +382,8 @@ const Valuation = () => {
                       <p className="text-sm text-gray-600">
                         Net Income ÷ Shareholder Equity
                       </p>
-                      <div className={`mt-2 text-xs font-semibold ${
-                        roe > 15 ? 'text-green-600' : roe > 10 ? 'text-yellow-600' : 'text-red-600'
-                      }`}>
+                      <div className={`mt-2 text-xs font-semibold ${roe > 15 ? 'text-green-600' : roe > 10 ? 'text-yellow-600' : 'text-red-600'
+                        }`}>
                         {roe > 15 ? '✓ Excellent' : roe > 10 ? '→ Good' : '⚠ Below Average'}
                       </div>
                     </div>
@@ -397,9 +394,8 @@ const Valuation = () => {
                       <p className="text-sm text-gray-600">
                         Net Income ÷ Total Assets
                       </p>
-                      <div className={`mt-2 text-xs font-semibold ${
-                        roa > 8 ? 'text-green-600' : roa > 5 ? 'text-yellow-600' : 'text-red-600'
-                      }`}>
+                      <div className={`mt-2 text-xs font-semibold ${roa > 8 ? 'text-green-600' : roa > 5 ? 'text-yellow-600' : 'text-red-600'
+                        }`}>
                         {roa > 8 ? '✓ Excellent' : roa > 5 ? '→ Good' : '⚠ Below Average'}
                       </div>
                     </div>
@@ -410,9 +406,8 @@ const Valuation = () => {
                       <p className="text-sm text-gray-600">
                         Net Income ÷ Invested Capital
                       </p>
-                      <div className={`mt-2 text-xs font-semibold ${
-                        roic > 12 ? 'text-green-600' : roic > 8 ? 'text-yellow-600' : 'text-red-600'
-                      }`}>
+                      <div className={`mt-2 text-xs font-semibold ${roic > 12 ? 'text-green-600' : roic > 8 ? 'text-yellow-600' : 'text-red-600'
+                        }`}>
                         {roic > 12 ? '✓ Excellent' : roic > 8 ? '→ Good' : '⚠ Below Average'}
                       </div>
                     </div>
