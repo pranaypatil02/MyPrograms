@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { FaChevronDown, FaChevronUp, FaDownload, FaInfoCircle } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import IncomeStatementTutor from '../components/IncomeStatementTutor';
+import BalanceSheetTutor from '../components/BalanceSheetTutor';
+import CashFlowTutor from '../components/CashFlowTutor';
 
 const Fundamentals = () => {
   const [activeModule, setActiveModule] = useState('earnings');
@@ -180,81 +182,10 @@ const Fundamentals = () => {
               {/* Module Content */}
               {activeModule === 'earnings' ? (
                 <IncomeStatementTutor />
+              ) : activeModule === 'balance' ? (
+                <BalanceSheetTutor />
               ) : (
-                <>
-                  {/* Visual Chart */}
-                  <div className="bg-gray-50 p-6 rounded-lg mb-6">
-                    <h3 className="font-semibold text-gray-800 mb-4">Visual Breakdown</h3>
-                    <ResponsiveContainer width="100%" height={300}>
-                      {activeModule === 'balance' && (
-                        <BarChart data={currentModule.chartData}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="category" />
-                          <YAxis />
-                          <Tooltip />
-                          <Legend />
-                          <Bar dataKey="total" fill="#3b82f6" />
-                        </BarChart>
-                      )}
-                      {activeModule === 'cashflow' && (
-                        <BarChart data={currentModule.chartData}>
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis dataKey="name" />
-                          <YAxis />
-                          <Tooltip />
-                          <Legend />
-                          <Bar dataKey="Q1" fill="#3b82f6" />
-                          <Bar dataKey="Q2" fill="#10b981" />
-                          <Bar dataKey="Q3" fill="#f59e0b" />
-                          <Bar dataKey="Q4" fill="#8b5cf6" />
-                        </BarChart>
-                      )}
-                    </ResponsiveContainer>
-                  </div>
-
-                  {/* Terms & Definitions */}
-                  <div className="space-y-4">
-                    <h3 className="font-semibold text-gray-800 mb-4">Key Concepts</h3>
-                    {currentModule.terms.map((term, index) => (
-                      <div key={index} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-lg text-gray-900 mb-2">{term.name}</h4>
-                            <p className="text-gray-700 mb-2">{term.definition}</p>
-                            <div className="bg-blue-50 border-l-4 border-blue-500 p-3 mb-2">
-                              <p className="text-sm text-gray-700">
-                                <span className="font-semibold">Example:</span> {term.example}
-                              </p>
-                            </div>
-                            <div className="bg-green-50 border-l-4 border-green-500 p-3">
-                              <p className="text-sm text-gray-700">
-                                <span className="font-semibold">Why it matters:</span> {term.importance}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Download Cheat Sheet */}
-                  <div className="mt-8 bg-gradient-to-r from-blue-50 to-blue-100 p-6 rounded-lg">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-semibold text-gray-900 mb-2">
-                          Download {currentModule.title} Cheat Sheet
-                        </h3>
-                        <p className="text-gray-600 text-sm">
-                          Quick reference guide with formulas and examples
-                        </p>
-                      </div>
-                      <button className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
-                        <FaDownload />
-                        Download PDF
-                      </button>
-                    </div>
-                  </div>
-                </>
+                <CashFlowTutor />
               )}
             </div>
           </motion.div>
