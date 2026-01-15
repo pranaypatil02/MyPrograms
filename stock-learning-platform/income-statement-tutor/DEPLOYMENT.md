@@ -1,206 +1,154 @@
-# Deployment Guide - Hostinger
+# Automated Deployment Setup
 
-This guide will help you deploy the Income Statement Tutor application to Hostinger.
+## Quick Start
 
-## Prerequisites
-
-- Hostinger account with Node.js hosting
-- Git repository with the application code
-- SSH access to your Hostinger server
-
-## Deployment Steps
-
-### 1. Build the Application
+### Option 1: One-Command Deployment (Manual Upload)
 
 ```bash
-cd income-statement-tutor
-npm run build
+npm run deploy
 ```
 
-### 2. Prepare for Production
+This will:
+1. Run all tests
+2. Build the production bundle
+3. Create `deploy.tar.gz` package
+4. Show instructions for uploading to Hostinger
 
-The application uses SQLite, which is perfect for deployment. The database file will be included in the deployment.
+Then upload the `deploy.tar.gz` file to your Hostinger server via FTP/cPanel File Manager.
 
-### 3. Deploy to Hostinger
+### Option 2: Fully Automated Deployment (SSH)
 
-#### Option A: Manual Deployment via FTP/SSH
+**First-time setup:**
 
-1. **Build the production bundle:**
-   ```bash
-   npm run build
-   ```
+1. Create `.env.deployment` file with your Hostinger credentials:
 
-2. **Upload these folders/files to your Hostinger public_html directory:**
-   - `.next/` folder (built application)
-   - `node_modules/` folder
-   - `package.json`
-   - `package-lock.json`
-   - `next.config.ts`
-   - `prisma/` folder (includes schema and database)
-   - `.env` file (with production database URL)
-   - `public/` folder
+```bash
+HOSTINGER_USER=your_cpanel_username
+HOSTINGER_HOST=your_server.hostinger.com
+HOSTINGER_PORT=22
+HOSTINGER_PATH=/home/your_username/public_html/income-statement-tutor
+```
 
-3. **Set up Node.js on Hostinger:**
-   - Go to Hostinger Control Panel
-   - Navigate to "Advanced" → "Node.js"
-   - Set Application URL (e.g., incomestatementtutor.yourdomain.com)
-   - Set Application Root to `/public_html/income-statement-tutor`
-   - Set Application Startup File to `node_modules/next/dist/bin/next`
-   - Add Application Startup Command: `start`
-   - Set Node.js version to 18.x or higher
+2. Load the environment variables:
+```bash
+source .env.deployment
+export $(cat .env.deployment | xargs)
+```
 
-#### Option B: Git Deployment
+3. Deploy:
+```bash
+npm run deploy        # Create deployment package
+npm run deploy:upload # Upload to Hostinger automatically
+```
 
-1. **Connect your Hosting via SSH**
+### Option 3: GitHub Actions (CI/CD)
 
-2. **Clone the repository:**
-   ```bash
-   cd public_html
-   git clone https://github.com/pranaypatil02/MyPrograms.git
-   cd MyPrograms/stock-learning-platform/income-statement-tutor
-   ```
+**Setup GitHub Secrets:**
 
-3. **Install dependencies:**
-   ```bash
-   npm install --production
-   ```
+Go to your GitHub repository → Settings → Secrets and variables → Actions, and add:
 
-4. **Build the application:**
-   ```bash
-   npm run build
-   ```
+- `HOSTINGER_HOST` - Your server hostname
+- `HOSTINGER_USER` - Your cPanel username
+- `HOSTINGER_PASSWORD` - Your cPanel password
+- `HOSTINGER_PORT` - SSH port (usually 22)
+- `HOSTINGER_PATH` - Deployment path on server
 
-5. **Start the application:** (Hostinger usually handles this via their Node.js manager)
+**Automatic Deployment:**
 
-### 4. Environment Variables
+Every push to `main` branch will automatically:
+1. Run tests
+2. Build the application
+3. Deploy to Hostinger
 
-Create a `.env.production` file:
+You can also trigger manual deployment from GitHub Actions tab.
+
+## Configuration Files
+
+- `deploy.sh` - Main deployment script (builds and packages)
+- `deploy-upload.sh` - Automated upload via SSH
+- `.github/workflows/deploy.yml` - GitHub Actions CI/CD pipeline
+
+## Deployment Process
+
+The deployment package includes:
+- `.next/` - Built Next.js application
+- `node_modules/` - Dependencies
+- `package.json` & `package-lock.json` - Package info
+- `next.config.ts` - Next.js configuration
+- `prisma/` - Database schema and SQLite file
+- `public/` - Static assets
+- `.env` - Environment variables
+
+## Hostinger Setup (One-Time)
+
+After first upload:
+
+1. Log in to Hostinger Control Panel
+2. Go to Advanced → Node.js
+3. Create New Application:
+   - **Application URL**: your domain/subdomain
+   - **Application Root**: `/public_html/income-statement-tutor`
+   - **Application Startup File**: `node_modules/next/dist/bin/next`
+   - **Application Startup Command**: `start`
+   - **Node.js Version**: 18.x or higher
+4. Click "Create"
+
+## Troubleshooting
+
+**Error: Permission denied**
+```bash
+chmod +x deploy.sh deploy-upload.sh
+```
+
+**Error: SSH connection failed**
+- Verify Hostinger SSH credentials
+- Check if SSH is enabled in cPanel
+- Confirm port number (usually 22 or 21098)
+
+**Error: Tests failed**
+- Fix failing tests before deploying
+- Or skip tests: Edit `deploy.sh` and comment out the test line
+
+## Environment Variables
+
+Create `.env.production` on the server:
 
 ```env
 NODE_ENV=production
 DATABASE_URL="file:./prisma/dev.db"
 ```
 
-### 5. Configure Next.js for Hostinger
+## Database Migration
 
-The `next.config.ts` should include:
+If you update the schema:
 
-```typescript
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  output: 'standalone', // For easier deployment
-};
-
-export default nextConfig;
+```bash
+# On your server via SSH
+cd /path/to/application
+npm run db:push
+npm run db:seed  # If you want to refresh data
 ```
 
-### 6. Application URL Setup
+## Monitoring
 
-Set up your custom domain or subdomain in Hostinger:
-1. Go to Domains section
-2. Point your domain/subdomain to the Node.js application
-3. Update DNS if needed
+Check application logs in Hostinger:
+- Navigate to Node.js section
+- Click on your application
+- View "Error Log" and "Access Log"
 
-## Post-Deployment
+## Rollback
 
-### Verify Deployment
+To rollback to a previous version:
 
-1. Visit your application URL
-2. Test all four modes:
-   - Learn mode (`/learn`)
-   - Builder mode (`/builder`)
-   - Analysis mode (`/analysis`)
-   - Valuation mode (`/valuation`)
-
-### Database Management
-
-- The SQLite database is included in the deployment
-- To reset/update the database:
-  ```bash
-  npm run db:push
-  npm run db:seed
-  ```
-
-## Troubleshooting
-
-### Common Issues
-
-**1. Application won't start:**
-- Check Node.js version (must be 18+)
-- Verify all dependencies are installed
-- Check startup file path in Hostinger panel
-
-**2. Database errors:**
-- Ensure `prisma/dev.db` file exists
-- Run `npm run db:generate` and `npm run db:push`
-
-**3. Static files not loading:**
-- Check the `public/` folder is uploaded
-- Verify Next.js build completed successfully
-
-**4. Environment variables not working:**
-- Ensure `.env` file is in the root directory
-- Check file permissions (should be readable)
-
-## Performance Optimization
-
-For better performance on Hostinger:
-
-1. **Enable compression** in Next.js config
-2. **Use CDN** for static assets if available
-3. **Monitor memory usage** - SQLite is lightweight but watch Node.js memory
-
-## Backup Strategy
-
-1. **Backup database regularly:**
-   ```bash
-   cp prisma/dev.db prisma/dev.db.backup
-   ```
-
-2. **Export data as JSON:**
-   ```bash
-   # Custom script to export data
-   node scripts/export-data.js > backup.json
-   ```
-
-## Updates and Maintenance
-
-To update  the application:
-
-1. Pull latest changes:
-   ```bash
-   git pull origin main
-   ```
-
-2. Install any new dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Rebuild:
-   ```bash
-   npm run build
-   ```
-
-4. Restart the application via Hostinger panel
-
-## Support
-
-- Hostinger Support: https://support.hostinger.com
-- Next.js Documentation: https://nextjs.org/docs
-- Application Issues: Check GitHub repository
+1. Keep backups of deployment packages
+2. Upload and extract the previous `deploy.tar.gz`
+3. Restart the application in Hostinger panel
 
 ---
 
-**Production Checklist:**
-- [ ] Built application (`npm run build`)
-- [ ] Uploaded all necessary files
-- [ ] Configured Node.js in Hostinger panel
-- [ ] Set environment variables
-- [ ] Tested all application modes
-- [ ] Set up custom domain/subdomain
-- [ ] Verified database is working
-- [ ] Created database backup
+**Now deploying is as simple as:**
+```bash
+npm run deploy
+```
 
-**Your application is ready for production! 🎉**
+Then upload `deploy.tar.gz` or use automated upload with `npm run deploy:upload`! 🚀
