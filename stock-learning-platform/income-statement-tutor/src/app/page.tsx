@@ -49,9 +49,12 @@ export default function HomePage() {
             <p className="text-gray-600 mb-6">
               Interactive explanations of revenue, expenses, margins, and ratios with quizzes and tooltips based on SEC/GAAP guidance.
             </p>
-            <div className="text-blue-600 font-semibold">
-              Coming Soon →
-            </div>
+            <Link
+              href="/learn"
+              className="text-blue-600 font-semibold hover:text-blue-700"
+            >
+              Start Learning →
+            </Link>
           </div>
 
           {/* Builder Mode */}
