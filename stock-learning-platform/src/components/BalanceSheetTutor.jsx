@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaChevronRight, FaChevronLeft, FaLightbulb, FaCheckCircle, FaExclamationTriangle, FaChartPie, FaUniversity, FaBalanceScale } from 'react-icons/fa';
 
 const BalanceSheetTutor = () => {
-    const [currentStep, setCurrentStep] = useState(0);
     const [quizAnswers, setQuizAnswers] = useState({});
     const [showQuizResults, setShowQuizResults] = useState(false);
 
@@ -121,7 +120,7 @@ const BalanceSheetTutor = () => {
                             <h4 className="font-bold text-gray-900">Non-Current Assets (Long-term)</h4>
                             <ul className="mt-2 space-y-2 text-sm text-gray-600">
                                 <li>🏭 <strong>Property, Plant & Equipment (PP&E):</strong> Factories, trucks, computers ("Hard" assets).</li>
-                                <li>🧠 <strong>Intangible Assets:</strong> Patents, trademarks, brand value.</li>
+                                🧠 <strong>Intangible Assets:</strong> Patents, trademarks, brand value.
                                 <li>🤝 <strong>Goodwill:</strong> Premium paid when buying another company above its fair value.</li>
                             </ul>
                         </div>
@@ -301,16 +300,6 @@ const BalanceSheetTutor = () => {
                     </div>
                 </div>
             )
-        },
-        {
-            title: "8. Mini Quiz 📝",
-            icon: <FaCheckCircle className="text-green-600" />,
-            content: (
-                <div className="space-y-6">
-                    <p className="text-gray-700 mb-4">Test your knowledge! Select the correct answer for each question.</p>
-                    {/* Quiz Content Rendered via helper function below */}
-                </div>
-            )
         }
     ];
 
@@ -384,131 +373,112 @@ const BalanceSheetTutor = () => {
         return score;
     };
 
-    const renderQuiz = () => (
-        <div className="space-y-8">
-            {quizQuestions.map((q, index) => (
-                <div key={q.id} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
-                    <h4 className="font-semibold text-lg mb-4">{index + 1}. {q.question}</h4>
-                    <div className="space-y-2">
-                        {q.options.map((opt, i) => (
-                            <button
-                                key={i}
-                                onClick={() => handleQuizAnswer(q.id, i)}
-                                disabled={showQuizResults}
-                                className={`w-full text-left p-3 rounded-md border transition-all ${showQuizResults
-                                    ? i === q.correct
-                                        ? "bg-green-100 border-green-500 text-green-800"
-                                        : quizAnswers[q.id] === i
-                                            ? "bg-red-100 border-red-500 text-red-800"
-                                            : "bg-gray-50 border-gray-200 opacity-50"
-                                    : quizAnswers[q.id] === i
-                                        ? "bg-blue-100 border-blue-500 text-blue-900"
-                                        : "hover:bg-gray-50 border-gray-200"
-                                    }`}
-                            >
-                                {opt}
-                            </button>
-                        ))}
-                    </div>
-                    {showQuizResults && (
-                        <div className={`mt-3 text-sm p-3 rounded ${quizAnswers[q.id] === q.correct ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                            <span className="font-bold">{quizAnswers[q.id] === q.correct ? 'Correct!' : 'Incorrect.'}</span> {q.explanation}
-                        </div>
-                    )}
-                </div>
-            ))}
-
-            {!showQuizResults ? (
-                <button
-                    onClick={() => setShowQuizResults(true)}
-                    disabled={Object.keys(quizAnswers).length < quizQuestions.length}
-                    className="w-full py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                    Check Answers
-                </button>
-            ) : (
-                <div className="text-center p-6 bg-blue-50 rounded-xl">
-                    <h3 className="text-2xl font-bold mb-2">You scored {calculateScore()} / {quizQuestions.length}</h3>
-                    <p className="text-gray-600 mb-4">{calculateScore() === 5 ? "Perfect Score! You're a Balance Sheet Pro! 🎓" : "Great effort! Review the explanations above to master the concepts."}</p>
-                    <button
-                        onClick={() => {
-                            setQuizAnswers({});
-                            setShowQuizResults(false);
-                            setCurrentStep(0);
-                        }}
-                        className="text-blue-600 hover:text-blue-800 font-semibold"
-                    >
-                        Restart Tutorial
-                    </button>
-                </div>
-            )}
-        </div>
-    );
-
     return (
-        <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200 min-h-[600px] flex flex-col">
-            {/* Header / Progress */}
-            <div className="bg-gray-50 border-b border-gray-200 p-6">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        {sections[currentStep].icon}
-                        {sections[currentStep].title}
-                    </h2>
-                    <span className="text-sm font-semibold text-gray-500 bg-gray-200 px-3 py-1 rounded-full">
-                        Step {currentStep + 1} of {sections.length}
-                    </span>
-                </div>
-                {/* Progress Bar */}
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div
-                        className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${((currentStep + 1) / sections.length) * 100}%` }}
-                    />
-                </div>
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-8 rounded-t-xl text-white">
+                <h2 className="text-3xl font-bold mb-2">Mastering the Balance Sheet</h2>
+                <p className="text-blue-100">A comprehensive guide to understanding what a company owns and owes.</p>
             </div>
 
-            {/* Content Area */}
-            <div className="flex-1 p-8 overflow-y-auto">
-                <AnimatePresence mode="wait">
+            <div className="p-8 space-y-12">
+                {/* Content Sections */}
+                {sections.slice(0, sections.length).map((section, index) => (
                     <motion.div
-                        key={currentStep}
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: -20 }}
-                        transition={{ duration: 0.2 }}
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="scroll-mt-8"
                     >
-                        {currentStep === sections.length - 1 ? renderQuiz() : sections[currentStep].content}
+                        <div className="flex items-center gap-3 mb-6 border-b pb-2">
+                            <div className="bg-blue-50 p-3 rounded-full text-xl">{section.icon}</div>
+                            <h3 className="text-2xl font-bold text-gray-800">{section.title}</h3>
+                        </div>
+                        <div className="pl-4 border-l-2 border-gray-100 ml-4">
+                            {section.content}
+                        </div>
                     </motion.div>
-                </AnimatePresence>
-            </div>
+                ))}
 
-            {/* Navigation Footer */}
-            <div className="bg-gray-50 border-t border-gray-200 p-6 flex justify-between items-center">
-                <button
-                    onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-                    disabled={currentStep === 0}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-gray-600 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                {/* Quiz Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="bg-gray-50 rounded-xl p-8 border border-gray-200"
                 >
-                    <FaChevronLeft /> Previous
-                </button>
-
-                {currentStep < sections.length - 1 ? (
-                    <button
-                        onClick={() => setCurrentStep(Math.min(sections.length - 1, currentStep + 1))}
-                        className="flex items-center gap-2 px-6 py-3 rounded-lg font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-md transition-all hover:shadow-lg"
-                    >
-                        Next Lesson <FaChevronRight />
-                    </button>
-                ) : (
-                    <div className="text-sm text-gray-500 italic">
-                        Tutorial Complete!
+                    <div className="flex items-center gap-3 mb-6">
+                        <FaCheckCircle className="text-3xl text-green-600" />
+                        <h3 className="text-2xl font-bold text-gray-800">Quiz 📝</h3>
                     </div>
-                )}
+                    <p className="text-gray-700 mb-8">Test your knowledge! Select the correct answer for each question.</p>
+
+                    <div className="space-y-8">
+                        {quizQuestions.map((q, index) => (
+                            <div key={q.id} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                                <h4 className="font-semibold text-lg mb-4">{index + 1}. {q.question}</h4>
+                                <div className="space-y-2">
+                                    {q.options.map((opt, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => handleQuizAnswer(q.id, i)}
+                                            disabled={showQuizResults}
+                                            className={`w-full text-left p-3 rounded-md border transition-all ${showQuizResults
+                                                    ? i === q.correct
+                                                        ? "bg-green-100 border-green-500 text-green-800"
+                                                        : quizAnswers[q.id] === i
+                                                            ? "bg-red-100 border-red-500 text-red-800"
+                                                            : "bg-gray-50 border-gray-200 opacity-50"
+                                                    : quizAnswers[q.id] === i
+                                                        ? "bg-blue-100 border-blue-500 text-blue-900"
+                                                        : "hover:bg-gray-50 border-gray-200"
+                                                }`}
+                                        >
+                                            {opt}
+                                        </button>
+                                    ))}
+                                </div>
+                                {showQuizResults && (
+                                    <div className={`mt-3 text-sm p-3 rounded ${quizAnswers[q.id] === q.correct ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
+                                        <span className="font-bold">{quizAnswers[q.id] === q.correct ? 'Correct!' : 'Incorrect.'}</span> {q.explanation}
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+
+                        {!showQuizResults ? (
+                            <button
+                                onClick={() => setShowQuizResults(true)}
+                                disabled={Object.keys(quizAnswers).length < quizQuestions.length}
+                                className="w-full py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-lg shadow-lg"
+                            >
+                                Check Answers
+                            </button>
+                        ) : (
+                            <div className="text-center p-8 bg-blue-50 rounded-xl border border-blue-100">
+                                <h3 className="text-3xl font-bold mb-2 text-blue-900">You scored {calculateScore()} / {quizQuestions.length}</h3>
+                                <p className="text-gray-600 mb-6 text-lg">{calculateScore() === 5 ? "Perfect Score! You're a Balance Sheet Pro! 🎓" : "Great effort! Review the sections above to master the concepts."}</p>
+                                <button
+                                    onClick={() => {
+                                        setQuizAnswers({});
+                                        setShowQuizResults(false);
+                                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }}
+                                    className="px-8 py-3 bg-white border-2 border-blue-600 text-blue-600 font-bold rounded-lg hover:bg-blue-50 transition-colors"
+                                >
+                                    Restart Tutorial
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </motion.div>
             </div>
 
             {/* Glossary Footer */}
-            <div className="bg-gray-800 text-gray-300 p-4 text-xs text-center border-t border-gray-700">
-                <p><strong>Remember:</strong> Assets = Liabilities + Equity. The Balance Sheet is a snapshot of what a company owns and owes.</p>
+            <div className="bg-gray-800 text-gray-300 p-6 text-center border-t border-gray-700 rounded-b-xl">
+                <p className="text-lg"><strong>Remember:</strong> Assets = Liabilities + Equity.</p>
             </div>
         </div>
     );
