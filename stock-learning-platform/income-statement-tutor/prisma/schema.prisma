@@ -1,0 +1,99 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id              String            @id @default(cuid())
+  name            String
+  ticker          String            @unique
+  currency        String            @default("USD") // USD, EUR, GBP, etc.
+  fiscalYearEnd   String            // e.g., "12-31"
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  statements      IncomeStatement[]
+}
+
+model IncomeStatement {
+  id              String            @id @default(cuid())
+  companyId       String
+  company         Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  
+  periodStart     DateTime
+  periodEnd       DateTime
+  periodLabel     String            // e.g., "FY 2024", "Q1 2024"
+  
+  sharesOutstanding Float?          // For EPS calculation
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  lineItems       LineItem[]
+  valuationInput  ValuationInput?
+  
+  @@index([companyId])
+  @@index([periodEnd])
+}
+
+model LineItem {
+  id              String            @id @default(cuid())
+  statementId     String
+  statement       IncomeStatement   @relation(fields: [statementId], references: [id], onDelete: Cascade)
+  
+  category        String            // REVENUE, COGS, GROSS_PROFIT, OPERATING_EXPENSE, etc.
+  label           String            // e.g., "Product Revenue", "Marketing Expense"
+  amount          Float
+  displayOrder    Int               // For rendering in correct order
+  
+  isSubtotal      Boolean           @default(false) // Marks calculated subtotals
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  adjustments     Adjustment[]
+  
+  @@index([statementId])
+  @@index([category])
+}
+
+model Adjustment {
+  id              String            @id @default(cuid())
+  lineItemId      String
+  lineItem        LineItem          @relation(fields: [lineItemId], references: [id], onDelete: Cascade)
+  
+  type            String            // RECLASSIFY_OPERATING, EXCLUDE_NON_RECURRING, etc.
+  amount          Float             // Adjustment amount (can be positive or negative)
+  notes           String            // Rationale for adjustment
+  
+  isRecurring     Boolean           @default(true)
+  isOperating     Boolean           @default(true)
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  
+  @@index([lineItemId])
+}
+
+model ValuationInput {
+  id              String            @id @default(cuid())
+  statementId     String            @unique
+  statement       IncomeStatement   @relation(fields: [statementId], references: [id], onDelete: Cascade)
+  
+  taxRate         Float             // Effective tax rate (0.21 = 21%)
+  nonCashCharges  Float             @default(0) // Depreciation, amortization, stock-based comp
+  capex           Float             @default(0) // Capital expenditures
+  wcChange        Float             @default(0) // Working capital change (positive = cash use)
+  
+  notes           String            @default("")
+  
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
