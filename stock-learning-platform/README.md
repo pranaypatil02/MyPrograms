@@ -149,12 +149,14 @@ npm run preview
 
 ## 🚀 Getting Started
 
-1. The app will run on `http://localhost:5173`
+1. The app will run on `http://localhost:5173`, Eventually the app should be able to hosted on hostinger 
 2. Navigate through different sections using the top navigation bar
 3. Start with the Home page to get an overview
 4. Visit Learning Paths to begin structured learning
 5. Use interactive tools in the Valuation section
 6. Reference the Glossary when you encounter new terms
+
+
 
 ## 📚 Project Structure
 
