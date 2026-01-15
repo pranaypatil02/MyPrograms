@@ -269,7 +269,7 @@ const BalanceSheetTutor = () => {
                             </li>
                             <li className="flex items-center gap-2">
                                 <FaCheckCircle className="text-green-500" />
-                                <span><strong>Working Capital:</strong> Are Current Assets > Current Liabilities? (Safety check).</span>
+                                <span><strong>Working Capital:</strong> Are Current Assets &gt; Current Liabilities? (Safety check).</span>
                             </li>
                             <li className="flex items-center gap-2">
                                 <FaCheckCircle className="text-green-500" />
@@ -396,14 +396,14 @@ const BalanceSheetTutor = () => {
                                 onClick={() => handleQuizAnswer(q.id, i)}
                                 disabled={showQuizResults}
                                 className={`w-full text-left p-3 rounded-md border transition-all ${showQuizResults
-                                        ? i === q.correct
-                                            ? "bg-green-100 border-green-500 text-green-800"
-                                            : quizAnswers[q.id] === i
-                                                ? "bg-red-100 border-red-500 text-red-800"
-                                                : "bg-gray-50 border-gray-200 opacity-50"
+                                    ? i === q.correct
+                                        ? "bg-green-100 border-green-500 text-green-800"
                                         : quizAnswers[q.id] === i
-                                            ? "bg-blue-100 border-blue-500 text-blue-900"
-                                            : "hover:bg-gray-50 border-gray-200"
+                                            ? "bg-red-100 border-red-500 text-red-800"
+                                            : "bg-gray-50 border-gray-200 opacity-50"
+                                    : quizAnswers[q.id] === i
+                                        ? "bg-blue-100 border-blue-500 text-blue-900"
+                                        : "hover:bg-gray-50 border-gray-200"
                                     }`}
                             >
                                 {opt}
