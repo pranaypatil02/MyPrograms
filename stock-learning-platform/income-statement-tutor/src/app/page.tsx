@@ -68,9 +68,12 @@ export default function HomePage() {
             <p className="text-gray-600 mb-6">
               Create and validate income statements using templates. Compare multiple periods and ensure formulas balance.
             </p>
-            <div className="text-green-600 font-semibold">
-              Coming Soon →
-            </div>
+            <Link
+              href="/builder"
+              className="text-green-600 font-semibold hover:text-green-700"
+            >
+              Build Now →
+            </Link>
           </div>
 
           {/* Analysis Mode */}
@@ -103,9 +106,12 @@ export default function HomePage() {
             <p className="text-gray-600 mb-6">
               Normalize statements and build FCFF bridges following Damodaran's methodology for professional valuations.
             </p>
-            <div className="text-orange-600 font-semibold">
-              Coming Soon →
-            </div>
+            <Link
+              href="/valuation"
+              className="text-orange-600 font-semibold hover:text-orange-700"
+            >
+              Calculate FCFF →
+            </Link>
           </div>
         </div>
 
