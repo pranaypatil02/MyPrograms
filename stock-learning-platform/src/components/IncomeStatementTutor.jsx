@@ -4,8 +4,21 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 
 const IncomeStatementTutor = () => {
     const [mode, setMode] = useState('overview'); // overview, learn, builder, analysis, valuation
-    const [statement, setStatement] = useState(null);
-    const [loading, setLoading] = useState(false);
+
+    // Static sample statement data
+    const SAMPLE_STATEMENT = {
+        id: '1',
+        periodLabel: 'FY 2024',
+        lineItems: [
+            { id: '1', category: 'REVENUE', label: 'Total Revenue', amount: 12000000, displayOrder: 1, isSubtotal: false },
+            { id: '2', category: 'COGS', label: 'Cost of Goods Sold', amount: 4800000, displayOrder: 2, isSubtotal: false },
+            { id: '3', category: 'GROSS_PROFIT', label: 'Gross Profit', amount: 7200000, displayOrder: 3, isSubtotal: true },
+            { id: '4', category: 'OPERATING_EXPENSE', label: 'Operating Expenses', amount: 4000000, displayOrder: 4, isSubtotal: false },
+            { id: '5', category: 'OPERATING_INCOME', label: 'Operating Income', amount: 3200000, displayOrder: 5, isSubtotal: true },
+            { id: '6', category: 'TAX', label: 'Income Tax', amount: 695700, displayOrder: 6, isSubtotal: false },
+            { id: '7', category: 'NET_INCOME', label: 'Net Income', amount: 2504300, displayOrder: 7, isSubtotal: true },
+        ]
+    };
 
     // Educational content for Learn mode
     const EDUCATIONAL_CONTENT = {
@@ -36,31 +49,7 @@ const IncomeStatementTutor = () => {
         }
     };
 
-    // Fetch sample statement data
-    useEffect(() => {
-        if (mode === 'learn' || mode === 'analysis') {
-            fetchSampleStatement();
-        }
-    }, [mode]);
 
-    const fetchSampleStatement = async () => {
-        setLoading(true);
-        try {
-            const res = await fetch('http://localhost:3001/api/companies');
-            const data = await res.json();
-            if (data.companies && data.companies.length > 0) {
-                const companyRes = await fetch(`http://localhost:3001/api/companies/${data.companies[0].id}`);
-                const companyData = await companyRes.json();
-                if (companyData.company.statements.length > 0) {
-                    setStatement(companyData.company.statements[0]);
-                }
-            }
-        } catch (err) {
-            console.error('Failed to load statement:', err);
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(value);
@@ -156,9 +145,6 @@ const IncomeStatementTutor = () => {
 
     // Learn Mode - Interactive Statement
     const renderLearnMode = () => {
-        if (loading) return <div className="text-center py-8">Loading...</div>;
-        if (!statement) return <div className="text-center py-8">No data available</div>;
-
         return (
             <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
@@ -175,12 +161,12 @@ const IncomeStatementTutor = () => {
                 </div>
 
                 <div className="space-y-2">
-                    {statement.lineItems.map((item) => (
+                    {SAMPLE_STATEMENT.lineItems.map((item) => (
                         <div
                             key={item.id}
                             className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-all ${item.isSubtotal
-                                    ? 'bg-blue-100 font-semibold border border-blue-300'
-                                    : 'bg-white hover:bg-gray-50 border border-gray-200'
+                                ? 'bg-blue-100 font-semibold border border-blue-300'
+                                : 'bg-white hover:bg-gray-50 border border-gray-200'
                                 }`}
                         >
                             <span className={item.isSubtotal ? 'font-bold' : ''}>
