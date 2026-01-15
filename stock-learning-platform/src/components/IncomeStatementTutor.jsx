@@ -97,7 +97,7 @@ const IncomeStatementTutor = () => {
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
                 <button
                     onClick={() => setMode('learn')}
                     className="bg-white border-2 border-blue-200 hover:border-blue-400 rounded-lg p-6 text-left transition-all hover:shadow-lg group"
@@ -114,9 +114,10 @@ const IncomeStatementTutor = () => {
                     </div>
                 </button>
 
+                {/* Hidden for now as per user request to focus on tutorials
                 <button
                     onClick={() => setMode('builder')}
-                    className="bg-white border-2 border-green-200 hover:border-green-400 rounded-lg p-6 text-left transition-all hover:shadow-lg group"
+                    className="bg-white border-2 border-green-200 hover:border-green-400 rounded-lg p-6 text-left transition-all hover:shadow-lg group opacity-50 cursor-not-allowed"
                 >
                     <div className="flex items-start justify-between">
                         <div>
@@ -132,7 +133,7 @@ const IncomeStatementTutor = () => {
 
                 <button
                     onClick={() => setMode('analysis')}
-                    className="bg-white border-2 border-purple-200 hover:border-purple-400 rounded-lg p-6 text-left transition-all hover:shadow-lg group"
+                    className="bg-white border-2 border-purple-200 hover:border-purple-400 rounded-lg p-6 text-left transition-all hover:shadow-lg group opacity-50 cursor-not-allowed"
                 >
                     <div className="flex items-start justify-between">
                         <div>
@@ -148,7 +149,7 @@ const IncomeStatementTutor = () => {
 
                 <button
                     onClick={() => setMode('valuation')}
-                    className="bg-white border-2 border-orange-200 hover:border-orange-400 rounded-lg p-6 text-left transition-all hover:shadow-lg group"
+                    className="bg-white border-2 border-orange-200 hover:border-orange-400 rounded-lg p-6 text-left transition-all hover:shadow-lg group opacity-50 cursor-not-allowed"
                 >
                     <div className="flex items-start justify-between">
                         <div>
@@ -161,6 +162,7 @@ const IncomeStatementTutor = () => {
                         <FaChevronRight className="text-gray-400 group-hover:text-orange-600 transition-colors" />
                     </div>
                 </button>
+                */}
             </div>
 
             <div className="bg-gray-50 p-6 rounded-lg border border-gray-200">
