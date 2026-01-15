@@ -1,11 +1,11 @@
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { FaBook, FaEdit, FaChartBar, FaCalculator, FaChevronRight } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 const IncomeStatementTutor = () => {
     // ALL hooks must be at the top level
     const [mode, setMode] = useState('overview');
-    const [selectedCategory, setSelectedCategory] = useState(null);
 
     // Builder mode state
     const [revenue, setRevenue] = useState(1000000);
@@ -177,88 +177,76 @@ const IncomeStatementTutor = () => {
 
     // Learn Mode - Interactive Statement
     const renderLearnMode = () => {
-        const content = selectedCategory ? EDUCATIONAL_CONTENT[selectedCategory] : null;
-
         return (
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2 space-y-4">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-lg font-bold">Interactive Income Statement</h3>
-                        <button onClick={() => setMode('overview')} className="text-blue-600 hover:text-blue-800">
-                            ← Back to Overview
-                        </button>
+            <div className="space-y-8 animate-fade-in">
+                {/* Header with Back Button */}
+                <div className="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 className="text-2xl font-bold text-gray-900">Interactive Income Statement</h3>
+                        <p className="text-gray-600">Scroll down to understand every line item.</p>
                     </div>
-
-                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
-                        <p className="text-sm text-gray-700">
-                            💡 <strong>Tip:</strong> Click on any line item to see its definition, formula, and examples
-                        </p>
-                    </div>
-
-                    <div className="space-y-2">
-                        {SAMPLE_STATEMENT.lineItems.map((item) => (
-                            <div
-                                key={item.id}
-                                onClick={() => setSelectedCategory(item.category)}
-                                className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-all ${selectedCategory === item.category
-                                        ? 'bg-purple-100 border-2 border-purple-400'
-                                        : item.isSubtotal
-                                            ? 'bg-blue-100 font-semibold border border-blue-300'
-                                            : 'bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300'
-                                    }`}
-                            >
-                                <span className={item.isSubtotal ? 'font-bold' : ''}>
-                                    {item.isSubtotal ? '=' : ''} {item.label}
-                                </span>
-                                <span className="font-mono">{formatCurrency(item.amount)}</span>
-                            </div>
-                        ))}
-                    </div>
-
-                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200 mt-6">
-                        <h4 className="font-semibold text-gray-900 mb-2">Key Formulas:</h4>
-                        <div className="text-sm text-gray-700 space-y-1">
-                            <p>• Gross Profit = Revenue - COGS</p>
-                            <p>• Operating Income = Gross Profit - Operating Expenses</p>
-                            <p>• Net Income = Operating Income - Taxes</p>
-                        </div>
-                    </div>
+                    <button onClick={() => setMode('overview')} className="text-blue-600 hover:text-blue-800 font-semibold flex items-center gap-1 transition-colors">
+                        ← Back to Overview
+                    </button>
                 </div>
 
-                {/* Sidebar - Educational Content */}
-                <div className="space-y-4">
-                    {content ? (
-                        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200 p-6 sticky top-6">
-                            <h3 className="text-lg font-bold text-gray-900 mb-3">
-                                {selectedCategory?.replace(/_/g, ' ')}
-                            </h3>
-                            <div className="space-y-4">
-                                <div>
-                                    <h4 className="text-sm font-semibold text-gray-700 mb-1">Definition</h4>
-                                    <p className="text-sm text-gray-800">{content.definition}</p>
-                                </div>
-
-                                <div>
-                                    <h4 className="text-sm font-semibold text-gray-700 mb-1">Formula</h4>
-                                    <div className="bg-white p-3 rounded border border-purple-200">
-                                        <code className="text-sm text-purple-900 font-mono">{content.formula}</code>
+                <div className="space-y-6">
+                    {SAMPLE_STATEMENT.lineItems.map((item, index) => {
+                        const content = EDUCATIONAL_CONTENT[item.category];
+                        return (
+                            <motion.div
+                                key={item.id}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: index * 0.1 }}
+                                className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"
+                            >
+                                {/* The Financial Line Item Representation */}
+                                <div className={`p-4 flex justify-between items-center ${item.isSubtotal ? 'bg-gray-50 border-b border-gray-200' : 'bg-white'
+                                    }`}>
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${item.isSubtotal ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'
+                                            }`}>
+                                            {index + 1}
+                                        </div>
+                                        <div>
+                                            <h4 className={`text-lg ${item.isSubtotal ? 'font-bold text-gray-900' : 'font-semibold text-gray-700'}`}>
+                                                {item.label}
+                                            </h4>
+                                        </div>
+                                    </div>
+                                    <div className={`font-mono text-lg ${item.isSubtotal ? 'font-bold text-gray-900' : 'text-gray-600'}`}>
+                                        {formatCurrency(item.amount)}
                                     </div>
                                 </div>
 
-                                <div>
-                                    <h4 className="text-sm font-semibold text-gray-700 mb-1">Example</h4>
-                                    <p className="text-sm text-gray-800">{content.example}</p>
-                                </div>
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
-                            <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Getting Started</h3>
-                            <p className="text-sm text-gray-700">
-                                Click on any line item on the left to see detailed definitions, formulas, and real-world examples.
-                            </p>
-                        </div>
-                    )}
+                                {/* The Educational Content */}
+                                {content && (
+                                    <div className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-t border-gray-100 grid md:grid-cols-3 gap-6">
+                                        <div>
+                                            <span className="text-xs font-bold uppercase tracking-wider text-blue-500 mb-1 block">Definition</span>
+                                            <p className="text-sm text-gray-800">{content.definition}</p>
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-bold uppercase tracking-wider text-purple-500 mb-1 block">Formula</span>
+                                            <code className="text-sm bg-white px-2 py-1 rounded border border-purple-100 text-purple-800 block w-fit">
+                                                {content.formula}
+                                            </code>
+                                        </div>
+                                        <div>
+                                            <span className="text-xs font-bold uppercase tracking-wider text-green-500 mb-1 block">Example</span>
+                                            <p className="text-sm text-gray-800 italic">"{content.example}"</p>
+                                        </div>
+                                    </div>
+                                )}
+                            </motion.div>
+                        );
+                    })}
+                </div>
+
+                <div className="bg-gray-800 text-gray-300 p-6 rounded-xl text-center mt-8">
+                    <p><strong>Ready to practice?</strong> Switch to <button onClick={() => setMode('builder')} className="text-white underline hover:text-blue-300 font-bold">Build Mode</button> to test your knowledge!</p>
                 </div>
             </div>
         );
