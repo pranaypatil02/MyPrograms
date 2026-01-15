@@ -1,9 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FaBook, FaEdit, FaChartBar, FaCalculator, FaChevronRight } from 'react-icons/fa';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 const IncomeStatementTutor = () => {
-    const [mode, setMode] = useState('overview'); // overview, learn, builder, analysis, valuation
+    // ALL hooks must be at the top level
+    const [mode, setMode] = useState('overview');
+    const [selectedCategory, setSelectedCategory] = useState(null);
+
+    // Builder mode state
+    const [revenue, setRevenue] = useState(1000000);
+    const [cogs, setCogs] = useState(400000);
+    const [opex, setOpex] = useState(300000);
+    const [tax, setTax] = useState(60000);
+
+    // Valuation mode state
+    const [operatingIncome, setOperatingIncome] = useState(3200000);
+    const [taxRate, setTaxRate] = useState(21);
+    const [dna, setDNA] = useState(500000);
+    const [capex, setCapex] = useState(400000);
+    const [wcChange, setWCChange] = useState(150000);
 
     // Static sample statement data
     const SAMPLE_STATEMENT = {
@@ -37,10 +52,20 @@ const IncomeStatementTutor = () => {
             formula: "Gross Profit = Revenue - Cost of Goods Sold",
             example: "Revenue of $10M minus COGS of $4M = Gross Profit of $6M."
         },
+        OPERATING_EXPENSE: {
+            definition: "Operating Expenses are costs required to run the business that aren't directly tied to production. Includes R&D, Sales & Marketing, and G&A.",
+            formula: "R&D + Sales & Marketing + G&A + Other Operating Costs",
+            example: "If a company spends $2M on marketing and $1.5M on R&D, operating expenses = $3.5M."
+        },
         OPERATING_INCOME: {
             definition: "Operating Income (EBIT) shows profit from core business operations before interest and taxes.",
             formula: "Operating Income = Gross Profit - Operating Expenses",
             example: "Gross Profit of $6M minus Operating Expenses of $3.5M = Operating Income of $2.5M."
+        },
+        TAX: {
+            definition: "Income tax expense is the amount of taxes payable on the company's earnings.",
+            formula: "Taxable Income × Tax Rate",
+            example: "If pretext income is $3M and tax rate is 21%, tax = $630,000."
         },
         NET_INCOME: {
             definition: "Net Income (the 'Bottom Line') is the final profit after all expenses, interest, and taxes.",
@@ -49,11 +74,18 @@ const IncomeStatementTutor = () => {
         }
     };
 
-
-
     const formatCurrency = (value) => {
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(value);
     };
+
+    // Calculations for Builder mode
+    const grossProfit = revenue - cogs;
+    const calcOperatingIncome = grossProfit - opex;
+    const netIncome = calcOperatingIncome - tax;
+
+    // Calculations for Valuation mode
+    const afterTaxOI = operatingIncome * (1 - taxRate / 100);
+    const fcff = afterTaxOI + dna - capex - wcChange;
 
     // Overview Mode
     const renderOverview = () => (
@@ -145,45 +177,88 @@ const IncomeStatementTutor = () => {
 
     // Learn Mode - Interactive Statement
     const renderLearnMode = () => {
+        const content = selectedCategory ? EDUCATIONAL_CONTENT[selectedCategory] : null;
+
         return (
-            <div className="space-y-4">
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-bold">Interactive Income Statement</h3>
-                    <button onClick={() => setMode('overview')} className="text-blue-600 hover:text-blue-800">
-                        ← Back to Overview
-                    </button>
-                </div>
-
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
-                    <p className="text-sm text-gray-700">
-                        💡 <strong>Tip:</strong> Click on any line item to see its definition, formula, and examples
-                    </p>
-                </div>
-
-                <div className="space-y-2">
-                    {SAMPLE_STATEMENT.lineItems.map((item) => (
-                        <div
-                            key={item.id}
-                            className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-all ${item.isSubtotal
-                                ? 'bg-blue-100 font-semibold border border-blue-300'
-                                : 'bg-white hover:bg-gray-50 border border-gray-200'
-                                }`}
-                        >
-                            <span className={item.isSubtotal ? 'font-bold' : ''}>
-                                {item.isSubtotal ? '=' : ''} {item.label}
-                            </span>
-                            <span className="font-mono">{formatCurrency(item.amount)}</span>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200 mt-6">
-                    <h4 className="font-semibold text-gray-900 mb-2">Key Formulas:</h4>
-                    <div className="text-sm text-gray-700 space-y-1">
-                        <p>• Gross Profit = Revenue - COGS</p>
-                        <p>• Operating Income = Gross Profit - Operating Expenses</p>
-                        <p>• Net Income = Operating Income - Taxes</p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div className="lg:col-span-2 space-y-4">
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-lg font-bold">Interactive Income Statement</h3>
+                        <button onClick={() => setMode('overview')} className="text-blue-600 hover:text-blue-800">
+                            ← Back to Overview
+                        </button>
                     </div>
+
+                    <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 mb-4">
+                        <p className="text-sm text-gray-700">
+                            💡 <strong>Tip:</strong> Click on any line item to see its definition, formula, and examples
+                        </p>
+                    </div>
+
+                    <div className="space-y-2">
+                        {SAMPLE_STATEMENT.lineItems.map((item) => (
+                            <div
+                                key={item.id}
+                                onClick={() => setSelectedCategory(item.category)}
+                                className={`flex justify-between items-center p-3 rounded-lg cursor-pointer transition-all ${selectedCategory === item.category
+                                        ? 'bg-purple-100 border-2 border-purple-400'
+                                        : item.isSubtotal
+                                            ? 'bg-blue-100 font-semibold border border-blue-300'
+                                            : 'bg-white hover:bg-gray-50 border border-gray-200 hover:border-gray-300'
+                                    }`}
+                            >
+                                <span className={item.isSubtotal ? 'font-bold' : ''}>
+                                    {item.isSubtotal ? '=' : ''} {item.label}
+                                </span>
+                                <span className="font-mono">{formatCurrency(item.amount)}</span>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200 mt-6">
+                        <h4 className="font-semibold text-gray-900 mb-2">Key Formulas:</h4>
+                        <div className="text-sm text-gray-700 space-y-1">
+                            <p>• Gross Profit = Revenue - COGS</p>
+                            <p>• Operating Income = Gross Profit - Operating Expenses</p>
+                            <p>• Net Income = Operating Income - Taxes</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Sidebar - Educational Content */}
+                <div className="space-y-4">
+                    {content ? (
+                        <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg border-2 border-purple-200 p-6 sticky top-6">
+                            <h3 className="text-lg font-bold text-gray-900 mb-3">
+                                {selectedCategory?.replace(/_/g, ' ')}
+                            </h3>
+                            <div className="space-y-4">
+                                <div>
+                                    <h4 className="text-sm font-semibold text-gray-700 mb-1">Definition</h4>
+                                    <p className="text-sm text-gray-800">{content.definition}</p>
+                                </div>
+
+                                <div>
+                                    <h4 className="text-sm font-semibold text-gray-700 mb-1">Formula</h4>
+                                    <div className="bg-white p-3 rounded border border-purple-200">
+                                        <code className="text-sm text-purple-900 font-mono">{content.formula}</code>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h4 className="text-sm font-semibold text-gray-700 mb-1">Example</h4>
+                                    <p className="text-sm text-gray-800">{content.example}</p>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="bg-blue-50 rounded-lg border border-blue-200 p-6">
+                            <h3 className="text-lg font-bold text-gray-900 mb-3">📚 Getting Started</h3>
+                            <p className="text-sm text-gray-700">
+                                Click on any line item on the left to see detailed definitions, formulas, and real-world examples.
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
         );
@@ -191,15 +266,6 @@ const IncomeStatementTutor = () => {
 
     // Builder Mode - Simple Statement Creator
     const renderBuilderMode = () => {
-        const [revenue, setRevenue] = useState(1000000);
-        const [cogs, setCogs] = useState(400000);
-        const [opex, setOpex] = useState(300000);
-        const [tax, setTax] = useState(60000);
-
-        const grossProfit = revenue - cogs;
-        const operatingIncome = grossProfit - opex;
-        const netIncome = operatingIncome - tax;
-
         return (
             <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
@@ -253,7 +319,7 @@ const IncomeStatementTutor = () => {
 
                     <div className="p-3 bg-blue-100 rounded-lg flex justify-between font-semibold">
                         <span>= Operating Income</span>
-                        <span>{formatCurrency(operatingIncome)}</span>
+                        <span>{formatCurrency(calcOperatingIncome)}</span>
                     </div>
 
                     <div>
@@ -276,7 +342,7 @@ const IncomeStatementTutor = () => {
                     <h4 className="font-semibold mb-2">Margins:</h4>
                     <div className="text-sm space-y-1">
                         <p>• Gross Margin: {((grossProfit / revenue) * 100).toFixed(1)}%</p>
-                        <p>• Operating Margin: {((operatingIncome / revenue) * 100).toFixed(1)}%</p>
+                        <p>• Operating Margin: {((calcOperatingIncome / revenue) * 100).toFixed(1)}%</p>
                         <p>• Net Margin: {((netIncome / revenue) * 100).toFixed(1)}%</p>
                     </div>
                 </div>
@@ -286,15 +352,15 @@ const IncomeStatementTutor = () => {
 
     // Analysis Mode - Margin Charts
     const renderAnalysisMode = () => {
-        const revenue = 12000000;
-        const grossProfit = 7200000;
-        const operatingIncome = 3200000;
-        const netIncome = 2504300;
+        const analysisRevenue = 12000000;
+        const analysisGrossProfit = 7200000;
+        const analysisOperatingIncome = 3200000;
+        const analysisNetIncome = 2504300;
 
         const marginData = [
-            { name: 'Gross Margin', value: (grossProfit / revenue) * 100, color: '#3b82f6' },
-            { name: 'Operating Margin', value: (operatingIncome / revenue) * 100, color: '#8b5cf6' },
-            { name: 'Net Margin', value: (netIncome / revenue) * 100, color: '#ec4899' },
+            { name: 'Gross Margin', value: (analysisGrossProfit / analysisRevenue) * 100, color: '#3b82f6' },
+            { name: 'Operating Margin', value: (analysisOperatingIncome / analysisRevenue) * 100, color: '#8b5cf6' },
+            { name: 'Net Margin', value: (analysisNetIncome / analysisRevenue) * 100, color: '#ec4899' },
         ];
 
         return (
@@ -352,15 +418,6 @@ const IncomeStatementTutor = () => {
 
     // Valuation Mode - FCFF Calculator
     const renderValuationMode = () => {
-        const [operatingIncome, setOperatingIncome] = useState(3200000);
-        const [taxRate, setTaxRate] = useState(21);
-        const [dna, setDNA] = useState(500000);
-        const [capex, setCapex] = useState(400000);
-        const [wcChange, setWCChange] = useState(150000);
-
-        const afterTaxOI = operatingIncome * (1 - taxRate / 100);
-        const fcff = afterTaxOI + dna - capex - wcChange;
-
         return (
             <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
