@@ -22,8 +22,8 @@ const ProfitabilityWaterfall = ({ data }) => {
             <div className="flex items-end justify-between h-64 gap-2 text-xs font-medium text-gray-600 sm:text-sm">
 
                 {/* Revenue Column */}
-                <div className="flex flex-col items-center w-full group">
-                    <div className="mb-2 font-bold text-blue-600">${revenue}</div>
+                <div className="flex flex-col items-center w-full group h-full justify-end">
+                    <div className="mb-2 font-bold text-blue-600 transition-all group-hover:-translate-y-1">${revenue}</div>
                     <div className="w-full bg-blue-500 rounded-t-lg transition-all group-hover:bg-blue-600 relative" style={{ height: '100%' }}>
                         <span className="absolute bottom-2 left-0 right-0 text-center text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">100%</span>
                     </div>
@@ -34,8 +34,8 @@ const ProfitabilityWaterfall = ({ data }) => {
                 <div className="pb-8 text-gray-400 font-bold text-xl">-</div>
 
                 {/* COGS Column */}
-                <div className="flex flex-col items-center w-full group">
-                    <div className="mb-2 text-red-500">-${costOfRevenue}</div>
+                <div className="flex flex-col items-center w-full group h-full justify-end">
+                    <div className="mb-2 text-red-500 transition-all group-hover:-translate-y-1">-${costOfRevenue}</div>
                     <div className="w-full bg-red-400 rounded-t-lg transition-all group-hover:bg-red-500" style={{ height: `${getHeight(costOfRevenue)}%` }}></div>
                     <div className="mt-2 text-center h-8 leading-tight">Cost of<br />Revenue</div>
                 </div>
@@ -44,8 +44,8 @@ const ProfitabilityWaterfall = ({ data }) => {
                 <div className="pb-8 text-gray-400 font-bold text-xl">=</div>
 
                 {/* Gross Profit */}
-                <div className="flex flex-col items-center w-full group">
-                    <div className="mb-2 text-gray-800">${grossProfit}</div>
+                <div className="flex flex-col items-center w-full group h-full justify-end">
+                    <div className="mb-2 text-gray-800 transition-all group-hover:-translate-y-1">${grossProfit}</div>
                     <div className="w-full bg-blue-400 rounded-t-lg transition-all group-hover:bg-blue-500" style={{ height: `${getHeight(grossProfit)}%` }}></div>
                     <div className="mt-2 text-center h-8 leading-tight">Gross<br />Profit</div>
                 </div>
@@ -53,8 +53,8 @@ const ProfitabilityWaterfall = ({ data }) => {
                 <div className="pb-8 text-gray-400 font-bold text-xl">-</div>
 
                 {/* OpEx */}
-                <div className="flex flex-col items-center w-full group">
-                    <div className="mb-2 text-red-500">-${opExpenses}</div>
+                <div className="flex flex-col items-center w-full group h-full justify-end">
+                    <div className="mb-2 text-red-500 transition-all group-hover:-translate-y-1">-${opExpenses}</div>
                     <div className="w-full bg-red-400 rounded-t-lg transition-all group-hover:bg-red-500" style={{ height: `${getHeight(opExpenses)}%` }}></div>
                     <div className="mt-2 text-center h-8 leading-tight">Op.<br />Expenses</div>
                 </div>
@@ -62,8 +62,8 @@ const ProfitabilityWaterfall = ({ data }) => {
                 <div className="pb-8 text-gray-400 font-bold text-xl">=</div>
 
                 {/* Op Income */}
-                <div className="flex flex-col items-center w-full group">
-                    <div className="mb-2 text-gray-800">${opIncome}</div>
+                <div className="flex flex-col items-center w-full group h-full justify-end">
+                    <div className="mb-2 text-gray-800 transition-all group-hover:-translate-y-1">${opIncome}</div>
                     <div className="w-full bg-blue-300 rounded-t-lg transition-all group-hover:bg-blue-500" style={{ height: `${getHeight(opIncome)}%` }}></div>
                     <div className="mt-2 text-center h-8 leading-tight">Operating<br />Income</div>
                 </div>
@@ -71,8 +71,8 @@ const ProfitabilityWaterfall = ({ data }) => {
                 <div className="pb-8 text-gray-400 font-bold text-xl">-</div>
 
                 {/* Tax */}
-                <div className="flex flex-col items-center w-full group">
-                    <div className="mb-2 text-red-500">-${taxes}</div>
+                <div className="flex flex-col items-center w-full group h-full justify-end">
+                    <div className="mb-2 text-red-500 transition-all group-hover:-translate-y-1">-${taxes}</div>
                     <div className="w-full bg-red-400 rounded-t-lg transition-all group-hover:bg-red-500" style={{ height: `${getHeight(taxes)}%` }}></div>
                     <div className="mt-2 text-center h-8 leading-tight">Taxes<br />& Other</div>
                 </div>
@@ -80,8 +80,8 @@ const ProfitabilityWaterfall = ({ data }) => {
                 <div className="pb-8 text-gray-400 font-bold text-xl">=</div>
 
                 {/* Net Income */}
-                <div className="flex flex-col items-center w-full group">
-                    <div className="mb-2 font-bold text-green-600">${netIncome}</div>
+                <div className="flex flex-col items-center w-full group h-full justify-end">
+                    <div className="mb-2 font-bold text-green-600 transition-all group-hover:-translate-y-1">${netIncome}</div>
                     <div className="w-full bg-green-500 rounded-t-lg transition-all group-hover:bg-green-600 shadow-md transform hover:scale-105" style={{ height: `${getHeight(netIncome)}%` }}></div>
                     <div className="mt-2 text-center h-8 leading-tight font-bold text-green-700">Net<br />Income</div>
                 </div>
