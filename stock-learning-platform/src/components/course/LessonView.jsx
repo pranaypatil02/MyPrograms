@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { MODULE_1_CONTENT } from '../../data/module1';
 import { FaDownload } from 'react-icons/fa';
+import ProfitabilityWaterfall from './visuals/ProfitabilityWaterfall';
+import MarginCharts from './visuals/MarginCharts';
 
 const LessonView = ({ onCompleteSection, completedSections }) => {
     // Scroll observation for "read" tracking could go here, 
@@ -81,7 +83,15 @@ const LessonView = ({ onCompleteSection, completedSections }) => {
                         <ReactMarkdown
                             components={{
                                 strong: ({ node, ...props }) => <span className="font-semibold text-blue-900 bg-blue-50 px-1 py-0.5 rounded" {...props} />,
-                                blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-blue-500 pl-4 py-2 italic bg-gray-50 my-4 rounded-r-lg" {...props} />
+                                blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-blue-500 pl-4 py-2 italic bg-gray-50 my-4 rounded-r-lg" {...props} />,
+                                p: ({ node, children, ...props }) => {
+                                    const text = Array.isArray(children) ? children[0] : children;
+                                    if (typeof text === 'string') {
+                                        if (text.includes("[WATERFALL_CHART]")) return <ProfitabilityWaterfall />;
+                                        if (text.includes("[MARGIN_CHART]")) return <MarginCharts data={{ cogsPercent: 54, opexPercent: 14, taxPercent: 5, profitPercent: 27 }} />;
+                                    }
+                                    return <p className="mb-4 leading-relaxed text-gray-700" {...props}>{children}</p>
+                                }
                             }}
                         >
                             {section.content}

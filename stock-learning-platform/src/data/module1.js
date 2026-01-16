@@ -12,67 +12,57 @@ An income statement (also called a Profit & Loss statement, or P&L) shows:
 - What profit remains at each layer (**Gross Profit**, **Operating Income**, **Pretax Income**, **Net Income**)
 
 ### Key idea: It covers a period of time
-Income statements are \"flow statements.\"
-Examples:
-- "For the year ended December 31, 2025"
-- "For the quarter ended September 30, 2025"
+Income statements are \"flow statements.\" They tell a story over a specific period, usually a quarter (3 months) or a fiscal year (12 months).
 
 ### Why investors care
 The income statement is the fastest way to answer:
-- Is this business growing?
+- Is this business growing? 
 - Is it profitable?
 - Is it becoming more efficient over time?
 - Are earnings high quality (repeatable) or boosted by one-time items?
             `
         },
         {
-            id: "accounting",
-            title: "2. Two Critical Accounting Ideas",
-            content: `
-### A) Accrual accounting (why profits and cash can differ)
-Most public companies use accrual accounting:
-- **Revenue** is recognized when earned (not necessarily when cash is received)
-- **Expenses** are recorded when incurred (not necessarily when cash is paid)
-
-**Example:**
-A company signs a 12-month subscription for $1,200 and gets paid upfront today.
-Under accrual accounting, revenue may be recognized as $100 per month, not $1,200 on day one.
-
-**What this means for investors:**
-You cannot assume "profit equals cash." Later, the cash flow statement will reconcile this.
-
-### B) Standardized vs As Reported
-Many finance platforms show two views:
-- **As Reported**: exactly as in filings (10-K/10-Q)
-- **Standardized**: reclassified into a common template for comparability across companies
-
-**Investor habit:**
-Use standardized for quick comparisons. Use as reported (and footnotes) for deep diligence.
-            `
-        },
-        {
             id: "waterfall",
             title: "3. The Profitability Waterfall",
             content: `
-Think of the income statement like a waterfall:
+Think of the income statement like a waterfall. You start with a big pool of money at the top (Revenue), and as it flows down, expenses are subtracted layer by layer until you reach the "Bottom Line" (Net Income).
 
-**Revenue**
-- Cost of Revenue
-= **Gross Profit**
-- Operating Expenses (SG&A, R&D, etc.)
-= **Operating Income** (EBIT)
-+/- Non-operating items (interest, other gains/losses)
-= **Pretax Income** (EBT)
-- Income Tax Expense
-= **Net Income**
-Divide by shares
-= **EPS** (Earnings Per Share)
+[WATERFALL_CHART]
 
 Each layer answers a different question:
-- **Gross Profit**: "Does the product have strong unit economics?"
-- **Operating Income**: "Is the business model profitable after running the company?"
-- **Net Income**: "What remains after financing choices and taxes?"
-- **EPS**: "How much profit belongs to each share I own?"
+- **Gross Profit**: "Does the product itself make money?"
+- **Operating Income**: "Is the business profitable after paying the staff and rent?"
+- **Net Income**: "What's left for shareholders after debt and the IRS?"
+            `
+        },
+        {
+            id: "apple-case-study",
+            title: "Case Study: Apple Inc. (FY2025)",
+            content: `
+Let's apply this to a real company. **Apple (AAPL)** is the gold standard for financial strength. Here is what their Fiscal Year 2025 looked like:
+
+> [!NOTE]
+> **Data Source:** Apple FY2025 10-K Filing. Numbers are in Billions USD.
+
+### 1. The Top Line (Revenue)
+Apple reported **$416.2 Billion** in total revenue.
+- This grew **6.4%** from 2024.
+- **iPhone sales** are the biggest driver, but **Services** (iCloud, App Store) are growing fast.
+
+### 2. The Expenses
+- **Cost of Revenue**: It cost apple roughly **$220 Billion** to make those iPhones and MacBooks.
+- **Operating Expenses**: They spent about **$60 Billion** on R&D (inventing new chips), Marketing, and paying their employees.
+
+### 3. The Bottom Line (Net Income)
+After paying all costs and taxes, Apple had **$112.0 Billion** in Net Income.
+- That is a massive **27% Net Margin**.
+- For every $1 you pay Apple, they keep 27 cents in pure profit.
+
+[MARGIN_CHART]
+
+### Why this is impressive
+Most hardware companies have net margins of 5-10%. Apple's 27% is unheard of for a company selling physical products. It shows they have **Pricing Power**—people love the brand enough to pay higher prices.
             `
         },
         {
@@ -105,35 +95,6 @@ Removes noise from debt and taxes.
             `
         },
         {
-            id: "non-operating",
-            title: "6. Non-Operating Section",
-            content: `
-### 6.1 Interest Expense
-Cost of borrowing. High interest can signal risk.
-
-### 6.2 Interest Income
-Income from cash/investments. Not "core operations."
-
-### 6.3 Other Non-Operating
-Catch-all for FX gains, settlements, etc. If large/frequent, investigate.
-            `
-        },
-        {
-            id: "taxes",
-            title: "8. Taxes and Net Income",
-            content: `
-### 8.1 Pretax Income (EBT)
-Operating Income +/- Non-operating items.
-
-### 8.2 Income Tax Expense
-Taxes recorded (may differ from cash taxes paid).
-
-### 8.3 Net Income
-The "Bottom Line". **Formula:** Pretax Income - Taxes.
-Influenced by one-time items, tax strategy, and debt.
-            `
-        },
-        {
             id: "per-share",
             title: "9. Per-Share Mechanics (EPS)",
             content: `
@@ -147,18 +108,7 @@ Rising shares = dilution (bad for EPS). Falling shares = buybacks (good for EPS)
 ### 9.4 EPS (Earnings Per Share)
 Profit allocated per share.
 **Formula:** Net Income / Weighted Avg Shares.
-EPS growth is often more important to stock price than total Net Income growth.
-            `
-        },
-        {
-            id: "margins",
-            title: "11. Margins: The Efficiency Dashboard",
-            content: `
-Margins turn dollars into percentages for comparability.
-
-- **Gross Margin**: Gross Profit / Revenue. Efficiency of production.
-- **Operating Margin**: Operating Income / Revenue. Efficiency of operations.
-- **Net Margin**: Net Income / Revenue. Final profitability.
+Apple's EPS for 2025 was **$7.46**. This means for every share of Apple stock you held, the company earned $7.46 in profit.
             `
         }
     ],
@@ -185,31 +135,31 @@ Margins turn dollars into percentages for comparability.
         },
         {
             id: 2,
+            question: "Apple had Net Income of $112B on $416B Revenue in 2025. What is their Net Margin?",
+            options: ["10%", "27%", "50%", "15%"],
+            correctAnswer: "27%",
+            explanation: "Net Margin = Net Income / Revenue = 112 / 416 = 0.269 or ~27%."
+        },
+        {
+            id: 3,
             question: "Which item is NOT part of Operating Expenses?",
             options: ["Marketing", "R&D", "Interest Expense", "Salaries"],
             correctAnswer: "Interest Expense",
             explanation: "Interest Expense is a non-operating item (financing cost), not an operating expense."
         },
         {
-            id: 3,
+            id: 4,
             question: "If Net Income is $10M and Shares Outstanding are 2M, what is the EPS?",
             options: ["$0.20", "$2.00", "$5.00", "$20.00"],
             correctAnswer: "$5.00",
             explanation: "EPS = Net Income / Shares = $10M / 2M = $5.00."
         },
         {
-            id: 4,
-            question: "True or False: Profit always equals Cash Flow.",
-            options: ["True", "False"],
-            correctAnswer: "False",
-            explanation: "Due to accrual accounting (e.g., selling on credit), profit is recorded when earned, not necessarily when cash is received."
-        },
-        {
             id: 5,
-            question: "Company A has 10% Net Margin. Company B has 5% Net Margin. Which is more efficient at turning revenue into profit?",
-            options: ["Company A", "Company B"],
-            correctAnswer: "Company A",
-            explanation: "A higher net margin (10%) means the company keeps more profit for every dollar of revenue."
+            question: "Why do investors prefer companies with high 'Pricing Power' like Apple?",
+            options: ["They sell fewer products", "They have higher margins", "They have closer relationships with suppliers", "They pay less taxes"],
+            correctAnswer: "They have higher margins",
+            explanation: "Pricing power allows a company to charge more without losing customers, leading to higher gross and net margins."
         }
     ]
 };
