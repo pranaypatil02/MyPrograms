@@ -36,35 +36,7 @@ Each layer answers a different question:
 - **Net Income**: "What's left for shareholders after debt and the IRS?"
             `
         },
-        {
-            id: "apple-case-study",
-            title: "Case Study: Apple Inc. (FY2025)",
-            content: `
-Let's apply this to a real company. **Apple (AAPL)** is the gold standard for financial strength. Here is what their Fiscal Year 2025 looked like:
 
-> [!NOTE]
-> **Data Source:** Apple FY2025 10-K Filing. Numbers are in Billions USD.
-
-### 1. The Top Line (Revenue)
-Apple reported **$416.2 Billion** in total revenue.
-- This grew **6.4%** from 2024.
-- **iPhone sales** are the biggest driver, but **Services** (iCloud, App Store) are growing fast.
-
-### 2. The Expenses
-- **Cost of Revenue**: It cost apple roughly **$220 Billion** to make those iPhones and MacBooks.
-- **Operating Expenses**: They spent about **$60 Billion** on R&D (inventing new chips), Marketing, and paying their employees.
-
-### 3. The Bottom Line (Net Income)
-After paying all costs and taxes, Apple had **$112.0 Billion** in Net Income.
-- That is a massive **27% Net Margin**.
-- For every $1 you pay Apple, they keep 27 cents in pure profit.
-
-[MARGIN_CHART]
-
-### Why this is impressive
-Most hardware companies have net margins of 5-10%. Apple's 27% is unheard of for a company selling physical products. It shows they have **Pricing Power**—people love the brand enough to pay higher prices.
-            `
-        },
         {
             id: "line-items-1",
             title: "5. Operating Section: Revenue to Operating Income",
@@ -94,21 +66,105 @@ Profit from core operations. **Formula:** Gross Profit - Operating Expenses.
 Removes noise from debt and taxes.
             `
         },
+
+        {
+            id: "non-operating",
+            title: "6. Non-Operating Items & Taxes",
+            content: `
+### 6.1 Interest Expense
+The cost of borrowing money (debt). This is a "financing" cost, not an operating cost.
+**Apple FY25:** ~$2.8B (Low because they have huge cash reserves).
+
+### 6.2 Interest & Investment Income
+Money earned from cash sitting in the bank or investments.
+**Apple FY25:** ~$3.0B (Apple is like a bank with its cash pile).
+
+### 6.3 Pretax Income (EBT)
+Earnings Before Tax.
+**Formula:** Operating Income + Interest Income - Interest Expense.
+**Apple FY25:** ~$137B.
+
+### 6.4 Income Tax Expense
+The government's share.
+**Apple FY25:** ~$25B.
+
+### 6.5 Effective Tax Rate
+The percentage of Pretax Income paid in taxes.
+**Formula:** Tax Expense / Pretax Income.
+**Apple FY25:** 25 / 137 ≈ **18.2%**.
+            `
+        },
+        {
+            id: "advanced-metrics",
+            title: "7. Advanced Earnings Metrics (EBITDA)",
+            content: `
+### 7.1 Depreciation & Amortization (D&A)
+Non-cash expenses representing the wear and tear of assets (factories, machines) or expiration of intangibles (patents).
+**Where is it?** Usually buried inside COGS or SG&A, but added back for Cash Flow.
+
+### 7.2 EBITDA
+"Earnings Before Interest, Taxes, Depreciation, and Amortization."
+**Formula:** Operating Income + D&A.
+**Why it matters:** It gives a clearer picture of "operating cash flow" potential by removing accounting decisions (depreciation) and financing decisions (debt).
+**Apple FY25 EBITDA:** ~$150B.
+
+### 7.3 EBIT vs. Operating Income
+Often used interchangeably, but EBIT technically includes non-operating income (like investment gains) before interest/taxes, while Operating Income is strictly core business.
+            `
+        },
         {
             id: "per-share",
-            title: "9. Per-Share Mechanics (EPS)",
+            title: "10. Shareholder Returns (EPS & Dividends)",
             content: `
-### 9.1 Shares Outstanding (Basic vs Diluted)
-**Basic**: Actual shares outstanding.
-**Diluted**: Includes potential dilution from options/RSUs. **Diluted** is more conservative for investors.
+### 10.1 Shares Outstanding (Basic vs Diluted)
+- **Basic:** Actual shares currently held by investors.
+- **Diluted:** Includes "potential" shares from employee stock options. **Always use Diluted for valuation.**
 
-### 9.2 Shares Change (YoY)
-Rising shares = dilution (bad for EPS). Falling shares = buybacks (good for EPS).
+### 10.2 EPS (Earnings Per Share)
+The "Price tag" of profit.
+**Formula:** Net Income / Diluted Shares.
+**Apple FY25:** $112B / 15B shares ≈ **$7.46**.
 
-### 9.4 EPS (Earnings Per Share)
-Profit allocated per share.
-**Formula:** Net Income / Weighted Avg Shares.
-Apple's EPS for 2025 was **$7.46**. This means for every share of Apple stock you held, the company earned $7.46 in profit.
+### 10.3 Dividends
+Cash returned directly to shareholders.
+- **Dividend Per Share:** Amount paid for each share you own.
+- **Dividend Yield:** Dividend / Stock Price. (Like an interest rate on your stock).
+
+### 10.4 Share Buybacks (The "Silent" Return)
+When a company uses cash to buy its own stock from the market and retires it.
+- **Effect:** Reduces share count.
+- **Result:** EPS goes UP even if Net Income stays flat (Same pie, fewer slices).
+**Apple is the king of buybacks, reducing share count by ~3% every year.**
+            `
+        },
+        {
+            id: "apple-case-study",
+            title: "Case Study: Apple Inc. (FY2025)",
+            content: `
+Let's see the full picture for **Apple (AAPL) FY2025**. Note how the "Bottom Line" isn't just one number—it's a journey.
+
+> [!NOTE]
+> **Data Source:** Apple FY2025 10-K. Values in Millions USD (except per share).
+
+| Line Item | Value | Explanation |
+| :--- | :--- | :--- |
+| **Revenue** | **$416,200** | The Top Line. iPhone, Mac, Services. |
+| Cost of Goods Sold | $(224,700)$ | Manufacturing, components, shipping. |
+| **Gross Profit** | **$191,500** | **46% Gross Margin**. Very healthy. |
+| R&D Expenses | $(34,500)$ | Investing in the future (AI, Vision Pro). |
+| SG&A Expenses | $(28,000)$ | Marketing, Apples Stores, Admin. |
+| **Operating Income** | **$129,000** | **31% Operating Margin**. Core profitability. |
+| Interest & Other | $200 | Net of Interest Income vs Expense. |
+| **Pretax Income** | **$129,200** | Earnings before Uncle Sam. |
+| Tax Expense | $(18,200)$ | ~14.1% Effective Tax Rate. |
+| **Net Income** | **$111,000** | **26.7% Net Margin**. The Bottom Line. |
+
+[MARGIN_CHART]
+
+### Key Takeaways
+1.  **High Margins**: 26.7% Net Margin is elite for a hardware company.
+2.  **Tax Efficient**: They pay a lower rate (14%) than the statutory US rate (21%).
+3.  **Massive Scale**: $111 Billion in profit is roughly the GDP of a small country.
             `
         }
     ],
@@ -116,14 +172,17 @@ Apple's EPS for 2025 was **$7.46**. This means for every share of Apple stock yo
         { term: "Revenue", definition: "Total value of goods/services delivered.", formula: "Price × Quantity" },
         { term: "COGS", definition: "Direct costs of producing goods/services.", formula: "Materials + Direct Labor" },
         { term: "Gross Profit", definition: "Revenue minus COGS.", formula: "Revenue - COGS" },
-        { term: "SG&A", definition: "Selling, General, and Administrative expenses.", formula: "Marketing + Salaries + Rent" },
-        { term: "R&D", definition: "Research and Development expenses.", formula: "Engineering salaries + Prototype costs" },
-        { term: "Operating Income", definition: "Profit from core operations before interest/tax.", formula: "Gross Profit - OpEx" },
-        { term: "EBITDA", definition: "Earnings Before Interest, Taxes, Depreciation, Amortization.", formula: "Operating Income + D&A" },
-        { term: "Pretax Income", definition: "Earnings before income taxes.", formula: "Operating Income - Interest" },
-        { term: "Net Income", definition: "The bottom line profit.", formula: "Pretax Income - Taxes" },
-        { term: "EPS", definition: "Earnings Per Share.", formula: "Net Income / Shares Outstanding" },
-        { term: "Dilution", definition: "Reduction in ownership % due to new shares issued.", formula: "N/A" }
+        { term: "OpEx", definition: "Operating Expenses (R&D, SG&A).", formula: "Sum of operating costs" },
+        { term: "Operating Income", definition: "Profit from core operations.", formula: "Gross Profit - OpEx" },
+        { term: "EBITDA", definition: "Earnings Before Interest, Taxes, Depreciation, Amortization.", formula: "Op Income + D&A" },
+        { term: "D&A", definition: "Depreciation & Amortization (Non-cash expenses).", formula: "N/A" },
+        { term: "Interest Expense", definition: "Cost of debt.", formula: "Debt × Interest Rate" },
+        { term: "Pretax Income", definition: "Earnings before paying income tax.", formula: "Op Income - Interest" },
+        { term: "Net Income", definition: "Bottom line profit.", formula: "Pretax Income - Taxes" },
+        { term: "EPS", definition: "Earnings Per Share.", formula: "Net Income / Shares" },
+        { term: "Dilution", definition: "Reduction in value due to more shares.", formula: "N/A" },
+        { term: "Dividend", definition: "Cash paid to shareholders.", formula: "Total Payout / Shares" },
+        { term: "Buyback", definition: "Company buying its own stock.", formula: "Reduces shares count" }
     ],
     quiz: [
         {
