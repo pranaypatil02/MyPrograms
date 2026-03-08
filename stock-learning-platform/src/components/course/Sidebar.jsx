@@ -1,17 +1,16 @@
 import { useState } from 'react';
-import { MODULE_1_CONTENT } from '../../data/module1';
 import { FaCheckCircle, FaCircle, FaSearch, FaBookOpen } from 'react-icons/fa';
 
-const Sidebar = ({ completedSections, activeSection, onNavigate, onSearchGlossary }) => {
+const Sidebar = ({ moduleData, completedSections, activeSection, onNavigate, onSearchGlossary }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [activeTab, setActiveTab] = useState('progress'); // 'progress' or 'glossary'
 
-    const filteredGlossary = MODULE_1_CONTENT.glossary.filter(item =>
+    const filteredGlossary = moduleData.glossary.filter(item =>
         item.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.definition.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const progressPercent = Math.round((completedSections.length / MODULE_1_CONTENT.sections.length) * 100);
+    const progressPercent = Math.round((completedSections.length / moduleData.sections.length) * 100);
 
     return (
         <div className="w-full lg:w-80 bg-white border-l border-gray-200 h-full flex flex-col sticky top-0 max-h-screen overflow-hidden">
@@ -46,7 +45,7 @@ const Sidebar = ({ completedSections, activeSection, onNavigate, onSearchGlossar
 
                     <div className="space-y-1">
                         <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Sections</h4>
-                        {MODULE_1_CONTENT.sections.map((section, idx) => {
+                        {moduleData.sections.map((section, idx) => {
                             const isCompleted = completedSections.includes(section.id);
                             const isActive = activeSection === section.id;
 

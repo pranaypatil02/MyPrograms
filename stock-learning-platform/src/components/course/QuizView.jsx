@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
-import { MODULE_1_CONTENT } from '../../data/module1';
 import { FaCheck, FaTimes, FaRedo } from 'react-icons/fa';
 
-const QuizView = ({ onCompleteQuiz }) => {
+const QuizView = ({ moduleData, moduleId, onCompleteQuiz }) => {
     const [answers, setAnswers] = useState({});
     const [showResults, setShowResults] = useState(false);
     const [score, setScore] = useState(0);
@@ -10,7 +9,7 @@ const QuizView = ({ onCompleteQuiz }) => {
 
     // Load best score on mount
     useEffect(() => {
-        const saved = localStorage.getItem('module1_quiz_best');
+        const saved = localStorage.getItem(`${moduleId}_quiz_best`);
         if (saved) setBestScore(parseInt(saved, 10));
     }, []);
 
@@ -21,19 +20,19 @@ const QuizView = ({ onCompleteQuiz }) => {
 
     const handleSubmit = () => {
         let correctCount = 0;
-        MODULE_1_CONTENT.quiz.forEach(q => {
+        moduleData.quiz.forEach(q => {
             if (answers[q.id] === q.correctAnswer) {
                 correctCount++;
             }
         });
 
-        const finalScore = Math.round((correctCount / MODULE_1_CONTENT.quiz.length) * 100);
+        const finalScore = Math.round((correctCount / moduleData.quiz.length) * 100);
         setScore(finalScore);
         setShowResults(true);
 
         if (finalScore > bestScore) {
             setBestScore(finalScore);
-            localStorage.setItem('module1_quiz_best', finalScore.toString());
+            localStorage.setItem(`${moduleId}_quiz_best`, finalScore.toString());
         }
 
         if (finalScore >= 80) {
@@ -52,12 +51,12 @@ const QuizView = ({ onCompleteQuiz }) => {
         <div className="max-w-2xl mx-auto px-6 py-10">
             <div className="text-center mb-10">
                 <h1 className="text-3xl font-bold text-gray-900 mb-2">Knowledge Check</h1>
-                <p className="text-gray-600">Test your understanding of the Income Statement.</p>
+                <p className="text-gray-600">Test your understanding of {moduleData?.title || 'this module'}.</p>
                 {bestScore > 0 && <p className="text-sm text-green-600 font-medium mt-2">Best Score: {bestScore}%</p>}
             </div>
 
             <div className="space-y-8">
-                {MODULE_1_CONTENT.quiz.map((q, index) => {
+                {moduleData.quiz.map((q, index) => {
                     const selected = answers[q.id];
                     const isCorrect = selected === q.correctAnswer;
 
@@ -120,7 +119,7 @@ const QuizView = ({ onCompleteQuiz }) => {
                 {!showResults ? (
                     <button
                         onClick={handleSubmit}
-                        disabled={Object.keys(answers).length < MODULE_1_CONTENT.quiz.length}
+                        disabled={Object.keys(answers).length < moduleData.quiz.length}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Submit Answers

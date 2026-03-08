@@ -15,7 +15,11 @@ const IncomeStatementTutor = () => {
     }, [mode]); // Update when switching back to overview
 
     if (mode === 'course') {
-        return <CourseContainer onBack={() => setMode('overview')} />;
+        return <CourseContainer
+            moduleData={MODULE_1_CONTENT}
+            moduleId="module1"
+            onBack={() => setMode('overview')}
+        />;
     }
 
     return (

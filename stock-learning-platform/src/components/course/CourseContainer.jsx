@@ -4,13 +4,13 @@ import LessonView from './LessonView';
 import QuizView from './QuizView';
 import { FaGraduationCap, FaArrowLeft } from 'react-icons/fa';
 
-const CourseContainer = ({ onBack }) => {
+const CourseContainer = ({ onBack, moduleData, moduleId }) => {
     const [completedSections, setCompletedSections] = useState([]);
     const [activeTab, setActiveTab] = useState('lesson'); // 'lesson' or 'quiz'
 
     // Load progress from localStorage
     useEffect(() => {
-        const savedProgress = localStorage.getItem('module1_progress');
+        const savedProgress = localStorage.getItem(`${moduleId}_progress`);
         if (savedProgress) {
             setCompletedSections(JSON.parse(savedProgress));
         }
@@ -20,7 +20,7 @@ const CourseContainer = ({ onBack }) => {
         if (!completedSections.includes(sectionId)) {
             const newProgress = [...completedSections, sectionId];
             setCompletedSections(newProgress);
-            localStorage.setItem('module1_progress', JSON.stringify(newProgress));
+            localStorage.setItem(`${moduleId}_progress`, JSON.stringify(newProgress));
         }
     };
 
@@ -44,7 +44,7 @@ const CourseContainer = ({ onBack }) => {
                 <button onClick={onBack} className="text-gray-600"><FaArrowLeft /></button>
                 <div className="font-bold flex items-center gap-2">
                     <FaGraduationCap className="text-blue-600" />
-                    <span>Module 1</span>
+                    <span>{moduleData?.title || 'Tutorial'}</span>
                 </div>
             </div>
 
@@ -74,11 +74,14 @@ const CourseContainer = ({ onBack }) => {
 
                 {activeTab === 'lesson' ? (
                     <LessonView
+                        moduleData={moduleData}
                         onCompleteSection={handleCompleteSection}
                         completedSections={completedSections}
                     />
                 ) : (
                     <QuizView
+                        moduleData={moduleData}
+                        moduleId={moduleId}
                         onCompleteQuiz={(score) => console.log('Quiz completed with:', score)}
                     />
                 )}
@@ -88,6 +91,7 @@ const CourseContainer = ({ onBack }) => {
             {activeTab === 'lesson' && (
                 <aside className="hidden lg:block h-full z-20 shadow-xl">
                     <Sidebar
+                        moduleData={moduleData}
                         completedSections={completedSections}
                         activeSection={null}
                         onNavigate={scrollToSection}

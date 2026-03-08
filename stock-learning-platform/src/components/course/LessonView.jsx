@@ -1,11 +1,10 @@
 import { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
-import { MODULE_1_CONTENT } from '../../data/module1';
 import { FaDownload } from 'react-icons/fa';
 import ProfitabilityWaterfall from './visuals/ProfitabilityWaterfall';
 import MarginCharts from './visuals/MarginCharts';
 
-const LessonView = ({ onCompleteSection, completedSections }) => {
+const LessonView = ({ moduleData, onCompleteSection, completedSections }) => {
     // Scroll observation for "read" tracking could go here, 
     // for now we'll just require clicking "Mark Complete" or automatically marking when viewed.
 
@@ -31,7 +30,7 @@ const LessonView = ({ onCompleteSection, completedSections }) => {
     }, [onCompleteSection]);
 
     const handleDownloadMarkdown = () => {
-        const fullText = MODULE_1_CONTENT.sections.map(s => `# ${s.title}\n\n${s.content}`).join('\n\n---\n\n');
+        const fullText = moduleData.sections.map(s => `# ${s.title}\n\n${s.content}`).join('\n\n---\n\n');
         const blob = new Blob([fullText], { type: 'text/markdown' });
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -46,7 +45,7 @@ const LessonView = ({ onCompleteSection, completedSections }) => {
         <div className="max-w-3xl mx-auto px-6 py-10 space-y-16">
             <div className="flex justify-between items-end border-b border-gray-200 pb-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{MODULE_1_CONTENT.title}</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{moduleData.title}</h1>
                     <p className="text-gray-600">Master the language of business profitability.</p>
                 </div>
                 <button
@@ -57,7 +56,7 @@ const LessonView = ({ onCompleteSection, completedSections }) => {
                 </button>
             </div>
 
-            {MODULE_1_CONTENT.sections.map((section, index) => (
+            {moduleData.sections.map((section, index) => (
                 <section
                     key={section.id}
                     id={section.id}
@@ -98,7 +97,7 @@ const LessonView = ({ onCompleteSection, completedSections }) => {
                         </ReactMarkdown>
                     </div>
                     {/* Divider */}
-                    {index < MODULE_1_CONTENT.sections.length - 1 && (
+                    {index < moduleData.sections.length - 1 && (
                         <hr className="my-12 border-gray-100" />
                     )}
                 </section>
