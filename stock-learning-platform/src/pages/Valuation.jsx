@@ -24,7 +24,7 @@ const Valuation = () => {
   const [investedCapital, setInvestedCapital] = useState(400);
 
   // Calculate P/E Ratio
-  const peRatio = (peStockPrice / peEarnings).toFixed(2);
+  const peRatio = (parseFloat(peStockPrice) / parseFloat(peEarnings)).toFixed(2);
   const peStatus = peRatio < peSectorAvg * 0.8 ? 'undervalued' :
     peRatio > peSectorAvg * 1.2 ? 'overvalued' : 'fair';
 

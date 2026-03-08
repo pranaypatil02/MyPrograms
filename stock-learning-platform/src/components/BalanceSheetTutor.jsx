@@ -87,7 +87,7 @@ const BalanceSheetTutor = () => {
                     </span>
                 </div>
 
-                {/* Module 3 - Locked */}
+                {/* Module 3 - Locked (Cash Flow) */}
                 <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 opacity-75 hidden md:block">
                     <div className="flex justify-between items-start mb-4">
                         <span className="bg-gray-200 text-gray-500 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Module 3</span>
@@ -100,7 +100,7 @@ const BalanceSheetTutor = () => {
                     <span className="text-gray-400 text-xs mt-4 block font-medium uppercase tracking-wider">Coming Soon</span>
                 </div>
 
-                {/* Module 4 - Locked */}
+                {/* Module 4 - Locked (Valuation) */}
                 <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 opacity-75 hidden md:block">
                     <div className="flex justify-between items-start mb-4">
                         <span className="bg-gray-200 text-gray-500 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Module 4</span>

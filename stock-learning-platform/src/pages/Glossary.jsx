@@ -159,7 +159,7 @@ const Glossary = () => {
   const filteredTerms = useMemo(() => {
     return glossaryTerms.filter(term => {
       const matchesSearch = term.term.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           term.definition.toLowerCase().includes(searchTerm.toLowerCase());
+        term.definition.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'all' || term.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
@@ -201,11 +201,10 @@ const Glossary = () => {
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
-                    className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                      selectedCategory === category
+                    className={`px-4 py-2 rounded-lg font-medium transition-all ${selectedCategory === category
                         ? 'bg-primary text-white shadow-md'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
+                      }`}
                   >
                     {category === 'all' ? 'All Categories' : category}
                   </button>
@@ -215,11 +214,10 @@ const Glossary = () => {
               {/* Simple Mode Toggle */}
               <button
                 onClick={() => setSimpleMode(!simpleMode)}
-                className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 ${
-                  simpleMode
+                className={`px-6 py-3 rounded-lg font-semibold transition-all flex items-center gap-2 ${simpleMode
                     ? 'bg-yellow-400 text-gray-900 shadow-lg'
                     : 'bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 <FaLightbulb />
                 {simpleMode ? 'Expert Mode' : 'Explain Like I\'m 15'}
@@ -229,7 +227,7 @@ const Glossary = () => {
 
           {/* Results Count */}
           <div className="mb-4 text-gray-600">
-            Showing {filteredTerms.length} of {glossaryTerms.length} terms
+            Showing {filteredTerms.length} of {glossaryTerms.length} terms {searchTerm && `for "${searchTerm}"`}
           </div>
 
           {/* Terms List */}
@@ -253,7 +251,7 @@ const Glossary = () => {
                 </div>
 
                 {simpleMode ? (
-                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+                  <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded mb-4">
                     <div className="flex items-start gap-2">
                       <FaLightbulb className="text-yellow-600 mt-1 flex-shrink-0" />
                       <p className="text-gray-800 font-medium">{term.simple}</p>

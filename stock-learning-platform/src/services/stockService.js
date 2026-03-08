@@ -31,7 +31,7 @@ async function tryWithFallback(apiCall, mockCall, ...args) {
       return { data: result, source: 'api', error: null };
     } catch (apiError) {
       console.warn(`API call failed, falling back to mock data:`, apiError.message);
-      
+
       // Rate limit or temporary error - try mock data
       try {
         const mockResult = await mockCall(...args);
@@ -55,12 +55,12 @@ async function tryWithFallback(apiCall, mockCall, ...args) {
  * Get stock data for a symbol
  */
 export async function getStockData(symbol) {
-   const apiCall = async (sym) => {
-     const analysis = await alphaVantage.getStockAnalysis(sym);
-     console.log('API Analysis for', sym, ':', analysis);
-     
-     // Transform API data to match our application's expected format
-     return {
+  const apiCall = async (sym) => {
+    const analysis = await alphaVantage.getStockAnalysis(sym);
+    console.log('API Analysis for', sym, ':', analysis);
+
+    // Transform API data to match our application's expected format
+    return {
       name: analysis.overview?.name || sym,
       sector: analysis.overview?.sector || 'Unknown',
       price: analysis.quote?.price || 0,
@@ -88,18 +88,49 @@ export async function getStockData(symbol) {
     };
   };
 
-   const mockCall = (sym) => {
-     console.log('Using mock data for', sym);
-     const stock = mockData.getMockStockData(sym);
-     
-     // Ensure we have all required fields
-     return {
-       ...stock,
-       priceHistory: stock.priceHistory || [],
-       strengths: stock.strengths || [],
-       risks: stock.risks || []
-     };
-   };
+  const mockCall = (sym) => {
+    console.log('Using mock data for', sym);
+    try {
+      const stock = mockData.getMockStockData(sym);
+      // Ensure we have all required fields
+      return {
+        ...stock,
+        priceHistory: stock.priceHistory || [],
+        strengths: stock.strengths || [],
+        risks: stock.risks || []
+      };
+    } catch (e) {
+      // Fallback for missing tickers so the Comparison tool doesn't break
+      console.warn(`Ticker ${sym} not found in mock data. Generating dummy profile.`);
+      const randomFactor = Math.random();
+      return {
+        name: `${sym} Corporation`,
+        symbol: sym,
+        sector: ['Technology', 'Finance', 'Healthcare', 'Consumer', 'Energy'][Math.floor(Math.random() * 5)],
+        price: (50 + randomFactor * 450).toFixed(2),
+        marketCap: formatMarketCap(1e9 + randomFactor * 100e9),
+        metrics: {
+          pe: (10 + randomFactor * 40).toFixed(2),
+          eps: (2 + randomFactor * 10).toFixed(2),
+          roe: (5 + randomFactor * 20).toFixed(2),
+          roa: (2 + randomFactor * 15).toFixed(2),
+          roic: (5 + randomFactor * 15).toFixed(2),
+          debtToEquity: (0.1 + randomFactor * 2).toFixed(2),
+          currentRatio: (1 + randomFactor * 2).toFixed(2),
+          grossMargin: (20 + randomFactor * 60).toFixed(2),
+          operatingMargin: (10 + randomFactor * 30).toFixed(2),
+          netMargin: (5 + randomFactor * 25).toFixed(2),
+          dividendYield: (0 + randomFactor * 5).toFixed(2),
+          fcf: (100 + randomFactor * 900).toFixed(2),
+          revenue: (1000 + randomFactor * 9000).toFixed(2),
+          revenueGrowth: (-5 + randomFactor * 30).toFixed(2)
+        },
+        priceHistory: [],
+        strengths: ['Generated Mock Data', 'Stable business model'],
+        risks: ['Generated Mock Data', 'Market competition']
+      };
+    }
+  };
 
   return tryWithFallback(apiCall, mockCall, symbol);
 }
@@ -162,12 +193,12 @@ export async function searchStocks(keywords) {
 export async function getSectorData(sector = null) {
   const apiCall = async (sec) => {
     const sectors = await alphaVantage.getSectorPerformance();
-    
+
     if (sec) {
       const sectorData = sectors.find(s => s.name === sec);
       return sectorData || null;
     }
-    
+
     return sectors;
   };
 
@@ -194,7 +225,7 @@ export async function getAvailableSymbols() {
     // For real API, we can't know all symbols - return common ones
     return ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA', 'JPM', 'JNJ', 'BAC'];
   }
-  
+
   return mockData.getAvailableMockSymbols();
 }
 
@@ -252,7 +283,7 @@ function transformTimeSeriesToChartData(timeSeries) {
   if (!timeSeries || timeSeries.length === 0) {
     // Return default chart data if no time series
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-     return months.map((month) => ({
+    return months.map((month) => ({
       month,
       price: 100 + Math.random() * 50
     }));
@@ -260,7 +291,7 @@ function transformTimeSeriesToChartData(timeSeries) {
 
   // Take last 6 data points for chart
   const recentData = timeSeries.slice(-6);
-  
+
   return recentData.map((data, index) => ({
     month: formatDateForChart(data.date, index),
     price: data.close || data.price || 0
@@ -272,7 +303,7 @@ function formatDateForChart(dateString, index) {
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
     return months[index % months.length];
   }
-  
+
   try {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { month: 'short' });
@@ -284,67 +315,67 @@ function formatDateForChart(dateString, index) {
 
 function generateStrengths(analysis) {
   const strengths = [];
-  
+
   if (analysis.overview?.marketCap > 100e9) {
     strengths.push('Large market capitalization indicates stability');
   }
-  
+
   if (analysis.calculatedMetrics.profitMargin > 20) {
     strengths.push('High profit margins indicate pricing power');
   }
-  
+
   if (analysis.calculatedMetrics.roe > 15) {
     strengths.push('Strong return on equity indicates efficient use of capital');
   }
-  
+
   if (analysis.calculatedMetrics.debtToEquity < 1) {
     strengths.push('Low debt levels reduce financial risk');
   }
-  
+
   if (analysis.calculatedMetrics.revenueGrowth > 10) {
     strengths.push('Strong revenue growth indicates market traction');
   }
-  
+
   if (strengths.length === 0) {
     strengths.push('Stable business model', 'Experienced management team');
   }
-  
+
   return strengths.slice(0, 5);
 }
 
 function generateRisks(analysis) {
   const risks = [];
-  
+
   if (analysis.calculatedMetrics.peRatio > 30) {
     risks.push('High valuation may limit upside potential');
   }
-  
+
   if (analysis.calculatedMetrics.debtToEquity > 2) {
     risks.push('High debt levels increase financial risk');
   }
-  
+
   if (analysis.calculatedMetrics.revenueGrowth < 5) {
     risks.push('Slow growth may indicate market saturation');
   }
-  
+
   if (analysis.calculatedMetrics.currentRatio < 1) {
     risks.push('Low current ratio may indicate liquidity concerns');
   }
-  
+
   if (analysis.overview?.beta > 1.5) {
     risks.push('High beta indicates volatility relative to market');
   }
-  
+
   if (risks.length === 0) {
     risks.push('Market competition', 'Economic cycle sensitivity', 'Regulatory changes');
   }
-  
+
   return risks.slice(0, 5);
 }
 
 function compareStocks(stock1, stock2) {
   const comparisons = [];
-  
+
   // Price comparison
   comparisons.push({
     metric: 'Price',
@@ -353,7 +384,7 @@ function compareStocks(stock1, stock2) {
     winner: stock1.price < stock2.price ? 'stock1' : 'stock2',
     difference: Math.abs(stock1.price - stock2.price)
   });
-  
+
   // P/E comparison
   comparisons.push({
     metric: 'P/E Ratio',
@@ -362,7 +393,7 @@ function compareStocks(stock1, stock2) {
     winner: stock1.metrics.pe < stock2.metrics.pe ? 'stock1' : 'stock2',
     difference: Math.abs(stock1.metrics.pe - stock2.metrics.pe)
   });
-  
+
   // ROE comparison
   comparisons.push({
     metric: 'ROE',
@@ -371,7 +402,7 @@ function compareStocks(stock1, stock2) {
     winner: stock1.metrics.roe > stock2.metrics.roe ? 'stock1' : 'stock2',
     difference: Math.abs(stock1.metrics.roe - stock2.metrics.roe)
   });
-  
+
   // Revenue Growth comparison
   comparisons.push({
     metric: 'Revenue Growth',
@@ -380,7 +411,7 @@ function compareStocks(stock1, stock2) {
     winner: stock1.metrics.revenueGrowth > stock2.metrics.revenueGrowth ? 'stock1' : 'stock2',
     difference: Math.abs(stock1.metrics.revenueGrowth - stock2.metrics.revenueGrowth)
   });
-  
+
   // Dividend Yield comparison
   comparisons.push({
     metric: 'Dividend Yield',
@@ -389,7 +420,7 @@ function compareStocks(stock1, stock2) {
     winner: stock1.metrics.dividendYield > stock2.metrics.dividendYield ? 'stock1' : 'stock2',
     difference: Math.abs(stock1.metrics.dividendYield - stock2.metrics.dividendYield)
   });
-  
+
   return comparisons;
 }
 

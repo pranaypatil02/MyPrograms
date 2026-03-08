@@ -23,6 +23,28 @@ The income statement is the fastest way to answer:
             `
         },
         {
+            id: "structure",
+            title: "2. The Basic Structure",
+            content: `
+### Top Line vs. Bottom Line
+The income statement always reads from top to bottom.
+
+At the very top is **Revenue** (the "Top Line").
+At the very bottom is **Net Income** (the "Bottom Line").
+
+Everything in between is an expense or an alternative source of income.
+
+### The Flow
+1. **Revenue** - Start here
+2. **Cost of Goods Sold (COGS)** - Subtract the direct cost of making the product
+3. **Gross Profit** - This is what remains
+4. **Operating Expenses** - Subtract the cost of running the business (salaries, marketing, rent)
+5. **Operating Income** - This is profit from core business operations.
+6. **Taxes and Interest** - Subtract what is owed to the government and banks
+7. **Net Income** - You have reached the bottom!
+            `
+        },
+        {
             id: "waterfall",
             title: "3. The Profitability Waterfall",
             content: `
@@ -34,6 +56,22 @@ Each layer answers a different question:
 - **Gross Profit**: "Does the product itself make money?"
 - **Operating Income**: "Is the business profitable after paying the staff and rent?"
 - **Net Income**: "What's left for shareholders after debt and the IRS?"
+            `
+        },
+        {
+            id: "margins",
+            title: "4. Understanding Margins",
+            content: `
+### What is a Margin?
+A margin is a profit metric expressed as a percentage of revenue. It is necessary because comparing raw dollars across companies of different sizes is impossible.
+
+### Important Margins
+- **Gross Margin:** (Gross Profit ÷ Revenue) × 100
+- **Operating Margin:** (Operating Income ÷ Revenue) × 100
+- **Net Margin:** (Net Income ÷ Revenue) × 100
+
+### Why it matters
+If Company A and Company B both have $10M in Net Income, but Company A generates it from $100M in Revenue (10% Net Margin) and Company B generates it from $50M in Revenue (20% Net Margin), Company B is running a much more efficient and attractive business.
             `
         },
 
@@ -110,6 +148,35 @@ Non-cash expenses representing the wear and tear of assets (factories, machines)
 
 ### 7.3 EBIT vs. Operating Income
 Often used interchangeably, but EBIT technically includes non-operating income (like investment gains) before interest/taxes, while Operating Income is strictly core business.
+            `
+        },
+        {
+            id: "quality",
+            title: "8. Quality of Earnings",
+            content: `
+Not all earnings are created equal. Investors seek "high quality" earnings that are repeatable.
+
+### One-Time Items
+Companies often report gains or losses that will not happen again next year. Examples include:
+- Selling off a subsidiary division.
+- Lawsuit settlement payouts.
+- Write-downs or restructuring charges.
+
+If a company reports huge Net Income growth, but it's entirely driven by selling a building, that is **low quality** earnings. The core business did not actually improve. Wall Street typically adjusts these numbers out to find "Adjusted Net Income."
+            `
+        },
+        {
+            id: "accrual",
+            title: "9. Accrual Accounting Limits",
+            content: `
+### Cash vs. Accounting Rules
+The biggest trap of the Income Statement is that **Net Income does NOT equal Cash**.
+
+Due to "Accrual Accounting" rules set by the GAAP/IFRS boards, companies recognize revenue when a product is delivered, not necessarily when the cash is received in the bank.
+
+Likewise, capital expenditures (like buying a $10M building) do not show up as a $10M loss on the Income Statement. Instead, they are "capitalized" on the Balance Sheet and "depreciated" over 30 years on the Income Statement.
+
+This is why we must always verify Net Income alongside the **Cash Flow Statement**.
             `
         },
         {

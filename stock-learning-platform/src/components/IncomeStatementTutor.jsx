@@ -74,17 +74,21 @@ const IncomeStatementTutor = () => {
                     </span>
                 </div>
 
-                {/* Module 2 - Locked */}
-                <div className="bg-gray-50 p-6 rounded-xl border border-gray-200 opacity-75">
+                {/* Module 2 - Go to Balance Sheet */}
+                <div
+                    className="bg-white p-6 rounded-xl border-2 border-transparent hover:border-gray-300 transition-all group cursor-pointer shadow-sm"
+                    onClick={() => window.location.hash = ''}
+                /* Ideally this would use React Router or state lifting, but as a simple UI cue: */
+                >
                     <div className="flex justify-between items-start mb-4">
-                        <span className="bg-gray-200 text-gray-500 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Module 2</span>
-                        <FaLock className="text-gray-400" />
+                        <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Module 2</span>
+                        <FaCheckCircle className="text-gray-400" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-500 mb-2">Balance Sheet Basics</h3>
-                    <p className="text-gray-500 text-sm">
+                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">Balance Sheet Basics</h3>
+                    <p className="text-gray-600 text-sm">
                         Assets, Liabilities, and Equity. Understand what a company owns and owes.
                     </p>
-                    <span className="text-gray-400 text-xs mt-4 block font-medium uppercase tracking-wider">Coming Soon</span>
+                    <span className="text-gray-500 text-xs mt-4 block font-medium uppercase tracking-wider">Available in Fundamentals tab</span>
                 </div>
 
                 {/* Module 3 - Locked */}

@@ -245,13 +245,14 @@ Try asking questions like:
 Or explore our interactive tools in the Valuation and Sectors sections!`;
   };
 
-  const handleSend = () => {
-    if (!input.trim()) return;
+  const handleSend = (textOverride = null) => {
+    const textToSend = textOverride || input;
+    if (!textToSend.trim()) return;
 
     // Add user message
     const userMessage = {
       type: 'user',
-      text: input,
+      text: textToSend,
       timestamp: new Date()
     };
 
@@ -262,7 +263,7 @@ Or explore our interactive tools in the Valuation and Sectors sections!`;
     setTimeout(() => {
       const aiResponse = {
         type: 'assistant',
-        text: getAIResponse(input),
+        text: getAIResponse(textToSend),
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiResponse]);
@@ -327,11 +328,10 @@ Or explore our interactive tools in the Valuation and Sectors sections!`;
                   className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`max-w-[80%] p-3 rounded-lg ${
-                      message.type === 'user'
+                    className={`max-w-[80%] p-3 rounded-lg ${message.type === 'user'
                         ? 'bg-primary text-white'
                         : 'bg-white text-gray-800 shadow-md'
-                    }`}
+                      }`}
                   >
                     <p className="text-sm whitespace-pre-line">{message.text}</p>
                   </div>
@@ -350,8 +350,7 @@ Or explore our interactive tools in the Valuation and Sectors sections!`;
                     <button
                       key={i}
                       onClick={() => {
-                        setInput(q);
-                        setTimeout(() => handleSend(), 100);
+                        handleSend(q);
                       }}
                       className="text-xs bg-white hover:bg-gray-100 text-gray-700 px-2 py-1 rounded block w-full text-left transition-colors"
                     >
