@@ -4,21 +4,21 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-slate-50 text-slate-900 font-sans antialiased selection:bg-indigo-100 selection:text-indigo-900;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-primary hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg;
+    @apply bg-gradient-to-r from-primary to-indigo-600 hover:to-indigo-500 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 shadow-lg shadow-indigo-600/20 hover:shadow-indigo-600/40 hover:-translate-y-0.5;
   }
 
   .btn-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg transition-all duration-200;
+    @apply bg-white hover:bg-slate-50 text-slate-800 font-semibold py-3 px-6 rounded-lg border border-slate-200 transition-all duration-300 shadow-sm hover:shadow-md hover:-translate-y-0.5;
   }
 
   .card {
-    @apply bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition-shadow duration-200;
+    @apply bg-white rounded-xl shadow-lg shadow-slate-200/50 p-6 border border-slate-100 hover:shadow-xl transition-shadow duration-300;
   }
 
   .metric-good {

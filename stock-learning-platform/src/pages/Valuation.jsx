@@ -115,8 +115,8 @@ const Valuation = () => {
               animate={{ opacity: 1, x: 0 }}
               className="space-y-6"
             >
-              <div className="card">
-                <h2 className="subsection-title">P/E Ratio Visualizer</h2>
+              <div className="bg-white/80 backdrop-blur-xl border border-slate-100 shadow-2xl shadow-indigo-500/5 rounded-3xl p-8">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-800 mb-2">P/E Ratio Visualizer</h2>
                 <p className="text-gray-600 mb-6">
                   The Price-to-Earnings ratio compares a company&apos;s stock price to its earnings per share.
                   Lower P/E ratios may indicate undervaluation.
@@ -161,9 +161,11 @@ const Valuation = () => {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 mb-4">Valuation Result</h3>
-                    <div className="bg-white rounded-lg p-6 mb-4">
+                  <div className="bg-gradient-to-br from-indigo-50 via-blue-50 to-white p-8 rounded-2xl border border-blue-100 shadow-inner">
+                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                      <FaChartLine className="text-primary" /> Valuation Result
+                    </h3>
+                    <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-8 mb-6 border border-white">
                       <div className="text-5xl font-bold text-center mb-2"
                         style={{
                           color: peStatus === 'undervalued' ? '#10b981' :
@@ -171,10 +173,10 @@ const Valuation = () => {
                         }}>
                         {peRatio}
                       </div>
-                      <p className="text-center text-gray-600">P/E Ratio</p>
+                      <p className="text-center text-slate-500 font-medium uppercase text-xs tracking-wider">Implied P/E Ratio</p>
                     </div>
 
-                    <div className={`p-4 rounded-lg flex items-center gap-3 ${peStatus === 'undervalued' ? 'bg-green-100 border border-green-300' :
+                    <div className={`p-5 rounded-2xl shadow-sm flex items-center gap-4 ${peStatus === 'undervalued' ? 'bg-emerald-50 border border-emerald-200 text-emerald-900' :
                       peStatus === 'overvalued' ? 'bg-red-100 border border-red-300' :
                         'bg-yellow-100 border border-yellow-300'
                       }`}>
@@ -198,18 +200,19 @@ const Valuation = () => {
                   </div>
                 </div>
 
-                {/* Sector Comparison Chart */}
-                <div className="mt-8">
-                  <h3 className="font-semibold text-gray-800 mb-4">Sector P/E Benchmarks</h3>
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={sectorData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="sector" />
-                      <YAxis />
-                      <Tooltip />
-                      <Bar dataKey="PE" fill="#3b82f6" />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className="mt-12">
+                  <h3 className="text-xl font-bold tracking-tight text-slate-800 mb-6">Sector P/E Benchmarks</h3>
+                  <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm">
+                    <ResponsiveContainer width="100%" height={300}>
+                      <BarChart data={sectorData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="sector" />
+                        <YAxis />
+                        <Tooltip />
+                        <Bar dataKey="PE" fill="#3b82f6" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -222,8 +225,8 @@ const Valuation = () => {
               animate={{ opacity: 1, x: 0 }}
               className="space-y-6"
             >
-              <div className="card">
-                <h2 className="subsection-title">DCF (Discounted Cash Flow) Calculator</h2>
+              <div className="bg-white/80 backdrop-blur-xl border border-slate-100 shadow-2xl shadow-indigo-500/5 rounded-3xl p-8">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-800 mb-2">DCF (Discounted Cash Flow) Calculator</h2>
                 <p className="text-gray-600 mb-6">
                   DCF estimates a company&apos;s fair value by projecting future cash flows and discounting them to present value.
                   This is a simplified version for educational purposes.
@@ -280,16 +283,18 @@ const Valuation = () => {
                     </div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-green-50 to-green-100 p-6 rounded-lg">
-                    <h3 className="font-semibold text-gray-900 mb-4">Estimated Fair Value</h3>
-                    <div className="bg-white rounded-lg p-6 mb-4">
-                      <div className="text-5xl font-bold text-center mb-2 text-green-600">
+                  <div className="bg-gradient-to-br from-emerald-50 via-teal-50 to-white p-8 rounded-2xl border border-emerald-100 shadow-inner">
+                    <h3 className="font-bold text-slate-800 mb-6 flex items-center gap-2">
+                      <FaCalculator className="text-emerald-600" /> Estimated Fair Value
+                    </h3>
+                    <div className="bg-white/90 backdrop-blur-sm shadow-xl rounded-2xl p-8 mb-6 border border-white">
+                      <div className="text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-emerald-500 to-teal-600 text-center mb-2">
                         ${dcfValue}M
                       </div>
-                      <p className="text-center text-gray-600">Present Value</p>
+                      <p className="text-center text-slate-500 font-medium uppercase text-xs tracking-wider">Present Value</p>
                     </div>
 
-                    <div className="bg-blue-50 border border-blue-300 p-4 rounded-lg">
+                    <div className="bg-white/60 border border-teal-100/50 shadow-sm p-6 rounded-2xl">
                       <p className="text-sm text-gray-700 mb-2">
                         <strong>How it works:</strong>
                       </p>
@@ -317,8 +322,8 @@ const Valuation = () => {
               animate={{ opacity: 1, x: 0 }}
               className="space-y-6"
             >
-              <div className="card">
-                <h2 className="subsection-title">ROE / ROA / ROIC Explorer</h2>
+              <div className="bg-white/80 backdrop-blur-xl border border-slate-100 shadow-2xl shadow-indigo-500/5 rounded-3xl p-8">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-800 mb-2">ROE / ROA / ROIC Explorer</h2>
                 <p className="text-gray-600 mb-6">
                   These metrics measure how efficiently a company uses its resources to generate profit.
                   Higher percentages generally indicate better performance.

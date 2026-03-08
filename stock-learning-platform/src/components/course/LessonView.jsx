@@ -42,11 +42,11 @@ const LessonView = ({ moduleData, onCompleteSection, completedSections }) => {
     };
 
     return (
-        <div className="max-w-3xl mx-auto px-6 py-10 space-y-16">
-            <div className="flex justify-between items-end border-b border-gray-200 pb-6">
+        <div className="max-w-4xl mx-auto px-6 py-12 space-y-16">
+            <div className="flex justify-between items-end border-b border-slate-200 pb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 mb-2">{moduleData.title}</h1>
-                    <p className="text-gray-600">Master the language of business profitability.</p>
+                    <h1 className="text-4xl font-extrabold tracking-tight text-slate-900 mb-3">{moduleData.title}</h1>
+                    <p className="text-lg text-slate-600 font-medium">Master the language of business profitability.</p>
                 </div>
                 <button
                     onClick={handleDownloadMarkdown}
@@ -63,8 +63,8 @@ const LessonView = ({ moduleData, onCompleteSection, completedSections }) => {
                     data-section-id={section.id}
                     className="scroll-mt-24"
                 >
-                    <div className="prose prose-blue max-w-none hover:prose-a:text-blue-600">
-                        <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-4">
+                    <div className="prose prose-indigo max-w-none hover:prose-a:text-indigo-600 font-serif text-lg leading-loose text-slate-800">
+                        <h2 className="text-3xl font-bold font-sans text-slate-900 mb-8 flex items-center gap-4">
                             {section.title}
                             <label className="flex items-center gap-2 text-sm font-normal text-gray-500 cursor-pointer bg-gray-50 px-3 py-1 rounded-full border border-gray-200 hover:bg-gray-100 transition-colors">
                                 <input
@@ -81,15 +81,15 @@ const LessonView = ({ moduleData, onCompleteSection, completedSections }) => {
 
                         <ReactMarkdown
                             components={{
-                                strong: ({ node, ...props }) => <span className="font-semibold text-blue-900 bg-blue-50 px-1 py-0.5 rounded" {...props} />,
-                                blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-blue-500 pl-4 py-2 italic bg-gray-50 my-4 rounded-r-lg" {...props} />,
+                                strong: ({ node, ...props }) => <strong className="font-semibold text-indigo-900 bg-indigo-50/80 px-1.5 py-0.5 rounded-md border border-indigo-100/50" {...props} />,
+                                blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-indigo-500 pl-6 py-3 italic bg-slate-50 my-6 rounded-r-xl shadow-sm font-medium text-slate-700 font-sans" {...props} />,
                                 p: ({ node, children, ...props }) => {
                                     const text = Array.isArray(children) ? children[0] : children;
                                     if (typeof text === 'string') {
                                         if (text.includes("[WATERFALL_CHART]")) return <ProfitabilityWaterfall />;
                                         if (text.includes("[MARGIN_CHART]")) return <MarginCharts data={{ cogsPercent: 54, opexPercent: 14, taxPercent: 5, profitPercent: 27 }} />;
                                     }
-                                    return <p className="mb-4 leading-relaxed text-gray-700" {...props}>{children}</p>
+                                    return <p className="mb-6 font-serif" {...props}>{children}</p>
                                 }
                             }}
                         >
@@ -103,9 +103,9 @@ const LessonView = ({ moduleData, onCompleteSection, completedSections }) => {
                 </section>
             ))}
 
-            <div className="bg-blue-50 p-8 rounded-xl text-center">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">🎉 You've reached the end of the lesson!</h3>
-                <p className="text-gray-600 mb-6">Review your progress and verify you've marked all sections as complete.</p>
+            <div className="bg-gradient-to-br from-indigo-50 to-blue-50 p-10 rounded-2xl text-center border border-indigo-100 shadow-sm mt-12">
+                <h3 className="text-2xl font-bold font-sans tracking-tight text-slate-900 mb-3">🎉 You've reached the end of the lesson!</h3>
+                <p className="text-slate-600 mb-8 font-sans font-medium text-lg">Review your progress and verify you've marked all sections as complete.</p>
             </div>
         </div>
     );

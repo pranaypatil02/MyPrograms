@@ -6,8 +6,12 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        serif: ['"Source Serif Pro"', 'serif'],
+      },
       colors: {
-        primary: '#1e40af', // blue
+        primary: '#4338ca', // indigo-700 for a richer premium feel
         secondary: '#6b7280', // grey
         accent: '#f59e0b', // orange/yellow
         success: '#10b981', // green

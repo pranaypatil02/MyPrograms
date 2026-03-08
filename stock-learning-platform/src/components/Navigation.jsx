@@ -5,15 +5,19 @@ import { FaHome, FaBook, FaCalculator, FaChartBar, FaListAlt, FaGraduationCap, F
 const Navigation = () => {
   const location = useLocation();
   const [showToolsDropdown, setShowToolsDropdown] = useState(false);
+  const [showAcademyDropdown, setShowAcademyDropdown] = useState(false);
 
   const navItems = [
     { path: '/', icon: FaHome, label: 'Home' },
-    { path: '/fundamentals', icon: FaBook, label: 'Fundamentals' },
-    { path: '/valuation', icon: FaCalculator, label: 'Valuation' },
-    { path: '/sectors', icon: FaChartBar, label: 'Sectors' },
-    { path: '/glossary', icon: FaListAlt, label: 'Glossary' },
-    { path: '/learning-paths', icon: FaGraduationCap, label: 'Learning Paths' },
     { path: '/community', icon: FaBlog, label: 'Community' },
+  ];
+
+  const academyItems = [
+    { path: '/fundamentals', icon: FaBook, label: 'Fundamentals', desc: 'Master financial statements' },
+    { path: '/learning-paths', icon: FaGraduationCap, label: 'Learning Paths', desc: 'Structured beginner courses' },
+    { path: '/valuation', icon: FaCalculator, label: 'Valuation Tools', desc: 'Calculate P/E ratios and DCF' },
+    { path: '/sectors', icon: FaChartBar, label: 'Sector Analysis', desc: 'Compare sector metrics' },
+    { path: '/glossary', icon: FaListAlt, label: 'Glossary', desc: 'Dictionary of financial terms' },
   ];
 
   const toolsItems = [
@@ -23,7 +27,7 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200/50 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
@@ -39,11 +43,10 @@ const Navigation = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors ${
-                    isActive
-                      ? 'bg-primary text-white'
-                      : 'text-gray-600 hover:bg-gray-100'
-                  }`}
+                  className={`flex items-center space-x-1 px-4 py-2 rounded-lg transition-colors ${isActive
+                      ? 'bg-primary text-white shadow-md shadow-indigo-500/20'
+                      : 'text-slate-600 hover:bg-slate-100/50 hover:text-primary'
+                    }`}
                 >
                   <Icon className="text-sm" />
                   <span className="text-sm font-medium">{item.label}</span>
@@ -51,19 +54,59 @@ const Navigation = () => {
               );
             })}
 
-            {/* Tools Dropdown */}
-            <div className="relative">
+            {/* Academy Dropdown */}
+            <div className="relative" onMouseLeave={() => setShowAcademyDropdown(false)}>
               <button
+                onMouseEnter={() => setShowAcademyDropdown(true)}
+                onClick={() => setShowAcademyDropdown(!showAcademyDropdown)}
+                className="flex items-center space-x-1 px-4 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100/50 hover:text-primary"
+              >
+                <FaGraduationCap className="text-sm" />
+                <span className="text-sm font-medium">Academy</span>
+                <FaChevronDown className="text-xs opacity-70" />
+              </button>
+
+              {showAcademyDropdown && (
+                <div className="absolute left-0 mt-1 w-72 bg-white/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-100 py-3 transition-opacity">
+                  {academyItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = location.pathname === item.path;
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setShowAcademyDropdown(false)}
+                        className={`flex items-start space-x-3 px-5 py-3 transition-colors ${isActive
+                            ? 'bg-indigo-50/50 text-primary'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-primary'
+                          }`}
+                      >
+                        <Icon className="text-lg mt-0.5 opacity-80" />
+                        <div>
+                          <p className="text-sm font-semibold">{item.label}</p>
+                          <p className="text-xs text-slate-500 font-normal mt-0.5">{item.desc}</p>
+                        </div>
+                      </Link>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Tools Dropdown */}
+            <div className="relative" onMouseLeave={() => setShowToolsDropdown(false)}>
+              <button
+                onMouseEnter={() => setShowToolsDropdown(true)}
                 onClick={() => setShowToolsDropdown(!showToolsDropdown)}
-                className="flex items-center space-x-1 px-3 py-2 rounded-lg transition-colors text-gray-600 hover:bg-gray-100"
+                className="flex items-center space-x-1 px-4 py-2 rounded-lg transition-colors text-slate-600 hover:bg-slate-100/50 hover:text-primary"
               >
                 <FaCalculator className="text-sm" />
                 <span className="text-sm font-medium">Tools</span>
-                <FaChevronDown className="text-xs" />
+                <FaChevronDown className="text-xs opacity-70" />
               </button>
 
               {showToolsDropdown && (
-                <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 py-2">
+                <div className="absolute right-0 mt-1 w-56 bg-white/95 backdrop-blur-xl rounded-xl shadow-2xl border border-slate-100 py-2">
                   {toolsItems.map((item) => {
                     const Icon = item.icon;
                     const isActive = location.pathname === item.path;
@@ -72,13 +115,12 @@ const Navigation = () => {
                         key={item.path}
                         to={item.path}
                         onClick={() => setShowToolsDropdown(false)}
-                        className={`flex items-center space-x-2 px-4 py-2 transition-colors ${
-                          isActive
-                            ? 'bg-primary text-white'
-                            : 'text-gray-700 hover:bg-gray-100'
-                        }`}
+                        className={`flex items-center space-x-3 px-4 py-2.5 transition-colors ${isActive
+                            ? 'bg-indigo-50/50 text-primary'
+                            : 'text-slate-700 hover:bg-slate-50 hover:text-primary'
+                          }`}
                       >
-                        <Icon className="text-sm" />
+                        <Icon className="text-sm opacity-80" />
                         <span className="text-sm font-medium">{item.label}</span>
                       </Link>
                     );
